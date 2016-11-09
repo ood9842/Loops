@@ -1,10 +1,12 @@
 package com.oop.loop.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.sun.corba.se.impl.oa.poa.ActiveObjectMap;
 
 /**
  * Created by Chetsada Chaiprasop on 11/9/2016.
@@ -17,6 +19,7 @@ public class Game_Frame implements Screen {
     private SpriteBatch batch;
     //TOOL
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private int count = 0;
 
     public Game_Frame(SpriteBatch batch)
     {
@@ -33,12 +36,15 @@ public class Game_Frame implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        drawGrid();
         trick();//process
     }
 
     private void trick() {
-
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
+        {
+            count++;
+        }
     }
 
     @Override
