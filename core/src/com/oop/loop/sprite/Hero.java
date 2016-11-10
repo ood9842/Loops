@@ -3,39 +3,63 @@ package com.oop.loop.sprite;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-
-import java.util.HashMap;
 
 import static com.oop.loop.sprite.State.StandingD;
 
 public class Hero implements ApplicationListener {
+    final static int  OBJECT_WIDHT = 32;
+    final static int  OBJECT_HIEGHT = 32;
+    final static int  FRAME_SIZE = 600;
+    final static int  VELOCITY = 150;
+
     State state = StandingD;
     State laststate = StandingD;
-    final HashMap<String, Sprite> sprites = new HashMap<String, Sprite>();
-    TextureAtlas player;
-    TextureAtlas textureAtlas;
 
+
+    TextureAtlas player;
     SpriteBatch batch;
 
     Animation walkLeft;
-    Animation standAnimation;
+
     Animation walkUp;
     Animation walkDown;
     Animation walkRight;
 
-    static float MAX_VELOCITY = 10f;
-    static float velocity = 0;
+
     Rectangle objPlayer ;
 
     float stateTime ;
 
-    boolean facesRight=false;
-        public Hero(SpriteBatch batch1){
+
+    public Hero(SpriteBatch batch1){
             this.batch = batch1;
 
         }
+    public void setObjPlayerPosition(int x, int y){
+        this.objPlayer.x = x;
+        this.objPlayer.y = y;
+
+    }
+    public int getObjectPositionX(){
+        return (int)objPlayer.x;
+
+
+    }
+    public int getObjectPositionY(){
+        return (int)objPlayer.y;
+
+
+    }
+
+    public Rectangle getObjPlayer() {
+        return objPlayer;
+    }
+
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -53,10 +77,10 @@ public class Hero implements ApplicationListener {
         walkRight.setPlayMode(Animation.PlayMode.LOOP);
 
         objPlayer = new Rectangle();
-        objPlayer.x = 800 / 2 - 64 / 2; // center the bucket horizontally
-        objPlayer.y = 20;
-        objPlayer.width = 64;
-        objPlayer.height = 64;
+        objPlayer.x = FRAME_SIZE / 2 - 32 / 2;
+        objPlayer.y = 32;
+        objPlayer.width = OBJECT_WIDHT;
+        objPlayer.height = OBJECT_HIEGHT;
     }
 
     @Override
@@ -83,8 +107,8 @@ public class Hero implements ApplicationListener {
 
     }
 
-    public void renderKoala(float deltaTime) {
-        // based on the koala state, get the animation frame
+    public void renderHero(float deltaTime) {
+
         TextureRegion frame = null;
         switch (state) {
             case StandingD:
@@ -113,10 +137,6 @@ public class Hero implements ApplicationListener {
                 break;
         }
 
-        // draw the koala, depending on the current velocity
-        // on the x-axis, draw the koala facing either right
-        // or left
-
 
         batch.begin();
 
@@ -125,7 +145,7 @@ public class Hero implements ApplicationListener {
         batch.end();
 
     }
-    public void updateKoala(float deltaTime) {
+    public void updateHero(float deltaTime) {
         if (deltaTime == 0) return;
 
         if (deltaTime > 0.1f)
@@ -137,22 +157,22 @@ public class Hero implements ApplicationListener {
 
             state = State.WalkingU;
             laststate = State.WalkingU;
-            objPlayer.y += 200 * deltaTime;
+            objPlayer.y += VELOCITY * deltaTime;
 
 
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             laststate = State.WalkingD;
             state = State.WalkingD;
-            objPlayer.y -= 200 * deltaTime;
+            objPlayer.y -= VELOCITY * deltaTime;
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             laststate = State.WalkingL;
             state = State.WalkingL;
-            objPlayer.x -= 200 * deltaTime;
+            objPlayer.x -= VELOCITY * deltaTime;
 
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             laststate = State.WalkingR;
             state = State.WalkingR;
-            objPlayer.x += 200 * deltaTime;
+            objPlayer.x += VELOCITY * deltaTime;
 
         } else {if (laststate == State.WalkingR) {
 
@@ -175,30 +195,19 @@ public class Hero implements ApplicationListener {
             //state = State.StandingD;
         }
 
-        //if (Gdx.input.isKeyJustPressed(Input.Keys.B))
-        //debug = !debug;
+
         if (objPlayer.x < 0)
             objPlayer.x = 0;
-        if (objPlayer.x > 600 - 64)
-            objPlayer.x = 600 - 64;
+        if (objPlayer.x > FRAME_SIZE - 40)
+            objPlayer.x = FRAME_SIZE - 40;
         if (objPlayer.y < 0)
             objPlayer.y = 0;
-        if (objPlayer.y > 600 - 64)
-            objPlayer.y = 600 - 64;
+        if (objPlayer.y > FRAME_SIZE - 40)
+            objPlayer.y = FRAME_SIZE - 40;
 
 
     }
-    private boolean isTouched (float startX, float endX) {
-        // Check for touch inputs between startX and endX
-        // startX/endX are given between 0 (left edge of the screen) and 1 (right edge of the screen)
-        for (int i = 0; i < 2; i++) {
-            float x = Gdx.input.getX(i) / (float)Gdx.graphics.getWidth();
-            if (Gdx.input.isTouched(i) && (x >= startX && x <= endX)) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     @Override
     public void dispose () {
