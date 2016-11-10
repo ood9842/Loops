@@ -18,7 +18,8 @@ public class Loops extends Game {
 		this.setScreen(new Game_Frame(batch));
 		hero = new Hero(batch);
 
-        item = new Item(batch);
+        item = new Item(batch,"b6");
+
 
 		batch = new SpriteBatch();
 		hero.create();

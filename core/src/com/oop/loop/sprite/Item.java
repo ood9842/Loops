@@ -17,10 +17,7 @@ public class Item implements ApplicationListener {
     TextureAtlas item;
     SpriteBatch batch;
 
-    Animation walkLeft;
-
-    Animation walkUp;
-    Animation walkDown;
+    String path;
     Animation walkRight;
 
 
@@ -29,8 +26,9 @@ public class Item implements ApplicationListener {
 
 
 
-    public Item(SpriteBatch batch1){
+    public Item(SpriteBatch batch1,String name){
         this.batch = batch1;
+        this.path = name;
 
     }
     public void setObjPlayerPosition(int x, int y){
@@ -38,30 +36,21 @@ public class Item implements ApplicationListener {
         this.objPlayer.y = y;
 
     }
+    public boolean overlaps(Rectangle obj) {
+        return  obj.overlaps(this.objPlayer);
+    }
 
     @Override
     public void create () {
         batch = new SpriteBatch();
         item = new TextureAtlas("sprite\\boy\\assets.txt");
 
-        walkLeft = new Animation(0.15f, item.findRegion("b5"),item.findRegion("b6"),item.findRegion("b7"),item.findRegion("b8"));
-        walkUp = new Animation(0.15f, item.findRegion("b13"),item.findRegion("b14"),item.findRegion("b15"),item.findRegion("b16"));
-        walkDown = new Animation(0.15f, item.findRegion("b1"),item.findRegion("b2"),item.findRegion("b3"),item.findRegion("b4"));
-        walkRight = new Animation(0.15f,item.findRegion("b9"),item.findRegion("b10"),item.findRegion("b11"),item.findRegion("b12"));
-
-        walkLeft.setPlayMode(Animation.PlayMode.LOOP);
-        walkUp.setPlayMode(Animation.PlayMode.LOOP);
-        walkDown.setPlayMode(Animation.PlayMode.LOOP);
-        walkRight.setPlayMode(Animation.PlayMode.LOOP);
 
         objPlayer = new Rectangle();
         objPlayer.x = FRAME_SIZE / 2 - 32 / 2;
         objPlayer.y = 32;
         objPlayer.width = OBJECT_WIDHT;
         objPlayer.height = OBJECT_HIEGHT;
-    }
-    public boolean overlaps(Rectangle obj) {
-      return  obj.overlaps(this.objPlayer);
     }
 
 
@@ -95,7 +84,7 @@ public class Item implements ApplicationListener {
 
         batch.begin();
 
-        batch.draw(item.findRegion("b9"), objPlayer.x, objPlayer.y, objPlayer.width, objPlayer.height);
+        batch.draw(item.findRegion(path), objPlayer.x, objPlayer.y, objPlayer.width, objPlayer.height);
 
         batch.end();
 
