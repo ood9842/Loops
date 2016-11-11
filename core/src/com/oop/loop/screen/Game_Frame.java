@@ -45,7 +45,7 @@ public class Game_Frame implements Screen {
         gamePort = new FitViewport(SIZE,SIZE,gameCam);
         //set map
         mapLoader =new TmxMapLoader();
-        map = mapLoader.load("map01.tmx");
+       // map = mapLoader.load("mapStage\\maptest.tmx");
         paintMap = new OrthoCachedTiledMapRenderer(map);
         gameCam.position.set(SIZE/2,SIZE/2,0);//SIZE window / 2 this is pattern
     }
