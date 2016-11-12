@@ -1,4 +1,4 @@
-package com.oop.loop.screen;
+package com.oop.loop.mapScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -27,7 +27,6 @@ public class Game_Frame implements Screen {
     private SpriteBatch batch;
     //TOOL
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private int count = 0;
     //map
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -45,7 +44,7 @@ public class Game_Frame implements Screen {
         gamePort = new FitViewport(SIZE,SIZE,gameCam);
         //set map
         mapLoader =new TmxMapLoader();
-       // map = mapLoader.load("mapStage\\maptest.tmx");
+        map = mapLoader.load("map_stage\\start_map.tmx");
         paintMap = new OrthoCachedTiledMapRenderer(map);
         gameCam.position.set(SIZE/2,SIZE/2,0);//SIZE window / 2 this is pattern
     }
@@ -70,10 +69,7 @@ public class Game_Frame implements Screen {
     }
 
     private void trick() {
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
-        {
-            count++;
-        }
+
     }
 
     @Override
