@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -30,7 +31,7 @@ public class Start_Map implements Screen{
     //map
     private TmxMapLoader mapLoader;
     private TiledMap map;
-    private OrthoCachedTiledMapRenderer paintMap;
+    private OrthogonalTiledMapRenderer paintMap;
     //game camera to cooperation map
     private OrthographicCamera gameCam;
     private Viewport gamePort;
@@ -59,7 +60,7 @@ public class Start_Map implements Screen{
         //set map
         mapLoader =new TmxMapLoader();
         map = mapLoader.load("map_stage\\start_map.tmx");
-        paintMap = new OrthoCachedTiledMapRenderer(map);
+        paintMap = new OrthogonalTiledMapRenderer(map);
         gameCam.position.set(SIZE/2,SIZE/2,0);//SIZE window / 2 this is pattern
         //create gate and setting gate
         gate_left = new Rectangle(0,270,GRID_CELL,GRID_CELL*2);
@@ -111,12 +112,12 @@ public class Start_Map implements Screen{
                 count = 0;
                 player.setObjPlayerPosition(532,284);//equal gate
                 map = mapLoader.load("map_stage\\quiz_map1.tmx");
-                paintMap = new OrthoCachedTiledMapRenderer(map);
+                paintMap = new OrthogonalTiledMapRenderer(map);
             }
             else
             {
                 map = mapLoader.load("map_stage\\default_map.tmx");
-                paintMap = new OrthoCachedTiledMapRenderer(map);
+                paintMap = new OrthogonalTiledMapRenderer(map);
                 if(late_enter =="LEFT")
                 {
                     player.setObjPlayerPosition(532, (int) Py);
@@ -144,7 +145,7 @@ public class Start_Map implements Screen{
             get_gate = -1;
             player.setObjPlayerPosition(532, 286);//equal gate
             map = mapLoader.load("map_stage\\start_map.tmx");
-            paintMap = new OrthoCachedTiledMapRenderer(map);
+            paintMap = new OrthogonalTiledMapRenderer(map);
         }
         drawGate();
     }
