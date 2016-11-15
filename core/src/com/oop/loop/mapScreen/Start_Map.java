@@ -159,11 +159,29 @@ public class Start_Map implements Screen{
     }
 
     private void checkGate() {
-        for(int i=0;i<not_pass.size();i++)
-        {
-            if(not_pass.get(i).overlaps(player.getObjPlayer()))
-            {
-                System.out.println("touch");
+        Rectangle tmp = new Rectangle();
+        for (Rectangle not_pas : not_pass) {
+
+            if (not_pas.overlaps(player.getObjPlayer())) {
+
+                tmp = not_pas;
+                player.walkAndCheck(tmp,tmp.getX(), tmp.getY(), tmp.getWidth(), tmp.getHeight());
+                Gdx.app.log("V",  not_pas.getX()+" "+  not_pas.getY()+" "+   not_pas.getWidth()+" "+  not_pas.getHeight());
+                Gdx.app.log("P ", player.getObjectPositionX()+" "+  player.getObjectPositionY());
+
+
+            }
+            if(!tmp.overlaps(player.getObjPlayer())){
+
+                player.VELOCITY_UP =  player.VELOCITY_RIGHT =   player.VELOCITY_LEFT =    player.VELOCITY_DOWN  = 150;
+            }
+            else {
+                player.CANRIGHT = true;
+                //player.VELOCITY_UP =  player.VELOCITY_RIGHT =   player.VELOCITY_LEFT =    player.VELOCITY_DOWN  = 150;
+                //Gdx.app.log("V2 ",  player.VELOCITY_DOWN+" "+  player.VELOCITY_UP+" "+  player.VELOCITY_RIGHT+" "+  player.VELOCITY_LEFT);
+                player.CANUP =true;
+                player.CANLEFT = true;
+                player.CANDOWN = true;
             }
         }
         if(gate_left.overlaps(player.getObjPlayer()))
@@ -234,7 +252,7 @@ public class Start_Map implements Screen{
             shapeRenderer.rect(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight());
         }
         shapeRenderer.end();
-        System.out.println(true_gate+" "+count);
+        //System.out.println(true_gate+" "+count);
     }
 
     private void drawGrid() {
