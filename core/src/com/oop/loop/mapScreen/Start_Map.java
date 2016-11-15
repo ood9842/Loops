@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oop.loop.sprite.Hero;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -35,6 +38,7 @@ public class Start_Map implements Screen{
     //game camera to cooperation map
     private OrthographicCamera gameCam;
     private Viewport gamePort;
+    private ArrayList<Rectangle> not_pass = new ArrayList<Rectangle>();
     //gate
     private Rectangle gate_left;
     private Rectangle gate_right;
@@ -62,6 +66,10 @@ public class Start_Map implements Screen{
         map = mapLoader.load("map_stage\\start_map.tmx");
         paintMap = new OrthogonalTiledMapRenderer(map);
         gameCam.position.set(SIZE/2,SIZE/2,0);//SIZE window / 2 this is pattern
+        for(MapObject object:map.getLayers().get("not_pass").getObjects().getByType(RectangleMapObject.class))
+        {
+            not_pass.add(((RectangleMapObject) object).getRectangle());
+        }
         //create gate and setting gate
         gate_left = new Rectangle(0,270,GRID_CELL,GRID_CELL*2);
         gate_right = new Rectangle(SIZE-30,270,GRID_CELL,GRID_CELL*2);
@@ -151,6 +159,13 @@ public class Start_Map implements Screen{
     }
 
     private void checkGate() {
+        for(int i=0;i<not_pass.size();i++)
+        {
+            if(not_pass.get(i).overlaps(player.getObjPlayer()))
+            {
+                System.out.println("touch");
+            }
+        }
         if(gate_left.overlaps(player.getObjPlayer()))
         {
             Px = player.getObjectPositionX();
@@ -214,6 +229,10 @@ public class Start_Map implements Screen{
         shapeRenderer.rect(gate_right.getX(),gate_right.getY(),gate_right.getWidth(),gate_right.getHeight());
         shapeRenderer.rect(gate_up.getX(),gate_up.getY(),gate_up.getWidth(),gate_up.getHeight());
         shapeRenderer.rect(gate_down.getX(),gate_down.getY(),gate_down.getWidth(),gate_down.getHeight());
+        for(Rectangle temp:not_pass)
+        {
+            shapeRenderer.rect(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight());
+        }
         shapeRenderer.end();
         System.out.println(true_gate+" "+count);
     }

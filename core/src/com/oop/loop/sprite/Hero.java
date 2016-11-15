@@ -25,7 +25,6 @@ public class Hero implements ApplicationListener {
     SpriteBatch batch;
 
     Animation walkLeft;
-
     Animation walkUp;
     Animation walkDown;
     Animation walkRight;
@@ -38,22 +37,19 @@ public class Hero implements ApplicationListener {
 
     public Hero(SpriteBatch batch1){
             this.batch = batch1;
-
         }
+
     public void setObjPlayerPosition(int x, int y){
         this.objPlayer.x = x;
         this.objPlayer.y = y;
-
     }
+
     public int getObjectPositionX(){
         return (int)objPlayer.x;
-
-
     }
+
     public int getObjectPositionY(){
         return (int)objPlayer.y;
-
-
     }
 
     public Rectangle getObjPlayer() {
@@ -64,7 +60,6 @@ public class Hero implements ApplicationListener {
     public void create () {
         batch = new SpriteBatch();
         player = new TextureAtlas("sprite\\boy\\assets.txt");
-
 
         walkLeft = new Animation(0.15f, player.findRegion("b5"),player.findRegion("b6"),player.findRegion("b7"),player.findRegion("b8"));
         walkUp = new Animation(0.15f, player.findRegion("b13"),player.findRegion("b14"),player.findRegion("b15"),player.findRegion("b16"));
@@ -147,19 +142,14 @@ public class Hero implements ApplicationListener {
     }
     public void updateHero(float deltaTime) {
         if (deltaTime == 0) return;
-
         if (deltaTime > 0.1f)
             deltaTime = 0.1f;
 
-
         stateTime += deltaTime;
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-
             state = State.WalkingU;
             laststate = State.WalkingU;
             objPlayer.y += VELOCITY * deltaTime;
-
-
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             laststate = State.WalkingD;
             state = State.WalkingD;
@@ -204,11 +194,12 @@ public class Hero implements ApplicationListener {
             objPlayer.y = 0;
         if (objPlayer.y > FRAME_SIZE - 40)
             objPlayer.y = FRAME_SIZE - 40;
-
-
     }
 
+    public void stopHero(int x,int y)
+    {
 
+    }
     @Override
     public void dispose () {
 
