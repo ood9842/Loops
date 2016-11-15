@@ -31,13 +31,11 @@ public class Start_Map implements Screen{
     private SpriteBatch batch;
     //TOOL
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    //map
-    private TmxMapLoader mapLoader;
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer paintMap;
     //game camera to cooperation map
     private OrthographicCamera gameCam;
     private Viewport gamePort;
+    private Wolrd_Map map;
+    private OrthogonalTiledMapRenderer paintMap;
     private ArrayList<Rectangle> not_pass = new ArrayList<Rectangle>();
     //gate
     private Rectangle gate_left;
@@ -62,14 +60,10 @@ public class Start_Map implements Screen{
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(SIZE,SIZE,gameCam);
         //set map
-        mapLoader =new TmxMapLoader();
-        map = mapLoader.load("map_stage\\start_map.tmx");
-        paintMap = new OrthogonalTiledMapRenderer(map);
+        map = new Wolrd_Map();
+        paintMap = map.getMap(Wolrd_Map.STRAT_MAP);
+        not_pass = map.getReg(Wolrd_Map.STRAT_MAP);
         gameCam.position.set(SIZE/2,SIZE/2,0);//SIZE window / 2 this is pattern
-        for(MapObject object:map.getLayers().get("not_pass").getObjects().getByType(RectangleMapObject.class))
-        {
-            not_pass.add(((RectangleMapObject) object).getRectangle());
-        }
         //create gate and setting gate
         gate_left = new Rectangle(0,270,GRID_CELL,GRID_CELL*2);
         gate_right = new Rectangle(SIZE-30,270,GRID_CELL,GRID_CELL*2);
@@ -119,13 +113,13 @@ public class Start_Map implements Screen{
             {
                 count = 0;
                 player.setObjPlayerPosition(532,284);//equal gate
-                map = mapLoader.load("map_stage\\quiz_map1.tmx");
-                paintMap = new OrthogonalTiledMapRenderer(map);
+                paintMap = map.getMap(Wolrd_Map.QUIZ_MAP1);
+                not_pass = map.getReg(Wolrd_Map.QUIZ_MAP1);
             }
             else
             {
-                map = mapLoader.load("map_stage\\default_map.tmx");
-                paintMap = new OrthogonalTiledMapRenderer(map);
+                paintMap = map.getMap(Wolrd_Map.DEFAULT_MAP);
+                not_pass = map.getReg(Wolrd_Map.DEFAULT_MAP);
                 if(late_enter =="LEFT")
                 {
                     player.setObjPlayerPosition(532, (int) Py);
@@ -152,8 +146,8 @@ public class Start_Map implements Screen{
             count = 0;
             get_gate = -1;
             player.setObjPlayerPosition(532, 286);//equal gate
-            map = mapLoader.load("map_stage\\start_map.tmx");
-            paintMap = new OrthogonalTiledMapRenderer(map);
+            paintMap = map.getMap(Wolrd_Map.STRAT_MAP);
+            not_pass = map.getReg(Wolrd_Map.STRAT_MAP);
         }
         drawGate();
     }
@@ -177,8 +171,6 @@ public class Start_Map implements Screen{
             }
             else {
                 player.CANRIGHT = true;
-                //player.VELOCITY_UP =  player.VELOCITY_RIGHT =   player.VELOCITY_LEFT =    player.VELOCITY_DOWN  = 150;
-                //Gdx.app.log("V2 ",  player.VELOCITY_DOWN+" "+  player.VELOCITY_UP+" "+  player.VELOCITY_RIGHT+" "+  player.VELOCITY_LEFT);
                 player.CANUP =true;
                 player.CANLEFT = true;
                 player.CANDOWN = true;
