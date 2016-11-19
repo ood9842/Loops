@@ -36,6 +36,16 @@ public class Item implements ApplicationListener {
         this.objPlayer.y = y;
 
     }
+    public int getObjectPositionX(){
+        return (int)objPlayer.x;
+
+
+    }
+    public int getObjectPositionY(){
+        return (int)objPlayer.y;
+
+
+    }
     public boolean overlaps(Rectangle obj) {
         return  obj.overlaps(this.objPlayer);
     }

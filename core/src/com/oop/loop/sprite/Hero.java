@@ -3,10 +3,12 @@ package com.oop.loop.sprite;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 import static com.oop.loop.sprite.State.StandingD;
@@ -15,7 +17,15 @@ public class Hero implements ApplicationListener {
     final static int  OBJECT_WIDHT = 32;
     final static int  OBJECT_HIEGHT = 32;
     final static int  FRAME_SIZE = 600;
-    final static int  VELOCITY = 150;
+    public int  VELOCITY_UP = 150;
+    public int  VELOCITY_DOWN = 150;
+    public int  VELOCITY_LEFT = 150;
+    public int  VELOCITY_RIGHT = 150;
+
+    public boolean CANRIGHT = true;
+    public boolean CANLEFT = true;
+    public boolean CANUP = true;
+    public boolean CANDOWN = true;
 
     State state = StandingD;
     State laststate = StandingD;
@@ -30,16 +40,19 @@ public class Hero implements ApplicationListener {
     Animation walkDown;
     Animation walkRight;
 
-
-    Rectangle objPlayer ;
+    Item item;
+    public Rectangle objPlayer ;
 
     float stateTime ;
 
+    int x = 0;
+    int y = 0;
+
 
     public Hero(SpriteBatch batch1){
-            this.batch = batch1;
+        this.batch = batch1;
 
-        }
+    }
     public void setObjPlayerPosition(int x, int y){
         this.objPlayer.x = x;
         this.objPlayer.y = y;
@@ -65,6 +78,13 @@ public class Hero implements ApplicationListener {
         batch = new SpriteBatch();
         player = new TextureAtlas("sprite\\boy\\assets.txt");
 
+        item = new Item(batch,"b6");
+
+        item.create();
+        item.setObjPlayerPosition(30*4,30*4);
+
+        x = item.getObjectPositionX();
+        y = item.getObjectPositionY();
 
         walkLeft = new Animation(0.15f, player.findRegion("b5"),player.findRegion("b6"),player.findRegion("b7"),player.findRegion("b8"));
         walkUp = new Animation(0.15f, player.findRegion("b13"),player.findRegion("b14"),player.findRegion("b15"),player.findRegion("b16"));
@@ -77,10 +97,13 @@ public class Hero implements ApplicationListener {
         walkRight.setPlayMode(Animation.PlayMode.LOOP);
 
         objPlayer = new Rectangle();
-        objPlayer.x = FRAME_SIZE / 2 - 32 / 2;
-        objPlayer.y = 32;
+        objPlayer.x = 0;
+        objPlayer.y = 0;
         objPlayer.width = OBJECT_WIDHT;
         objPlayer.height = OBJECT_HIEGHT;
+
+        Gdx.app.log("", String.valueOf(objPlayer.getX())+String.valueOf(objPlayer.getY()));
+
     }
 
     @Override
@@ -92,7 +115,10 @@ public class Hero implements ApplicationListener {
 
     @Override
     public void render () {
-         //stateTime = deltaTime;
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        //stateTime = deltaTime;
+        item.renderItem(deltaTime);
+
 
 
     }
@@ -153,31 +179,42 @@ public class Hero implements ApplicationListener {
 
 
         stateTime += deltaTime;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) && CANUP) {
 
             state = State.WalkingU;
             laststate = State.WalkingU;
-            objPlayer.y += VELOCITY * deltaTime;
+            objPlayer.y += VELOCITY_UP * deltaTime;
 
 
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))&& CANDOWN) {
             laststate = State.WalkingD;
             state = State.WalkingD;
-            objPlayer.y -= VELOCITY * deltaTime;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+            objPlayer.y -= VELOCITY_DOWN * deltaTime;
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) && CANLEFT) {
+
             laststate = State.WalkingL;
             state = State.WalkingL;
-            objPlayer.x -= VELOCITY * deltaTime;
+            objPlayer.x -= VELOCITY_LEFT * deltaTime;
 
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) && CANRIGHT) {
+
             laststate = State.WalkingR;
             state = State.WalkingR;
-            objPlayer.x += VELOCITY * deltaTime;
+            objPlayer.x += VELOCITY_RIGHT * deltaTime;
+
 
         } else {if (laststate == State.WalkingR) {
 
             state = State.StandingR;
         }
+            if ((Gdx.input.isKeyPressed(Input.Keys.SPACE))){
+
+                objPlayer.set(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,30,30);
+
+
+
+            }
             if (laststate == State.WalkingD) {
 
                 state = State.StandingD;
@@ -196,14 +233,54 @@ public class Hero implements ApplicationListener {
         }
 
 
+
+        walkWithKey();
+
+
+    }
+    public void walkWithKey(){
         if (objPlayer.x < 0)
             objPlayer.x = 0;
-        if (objPlayer.x > FRAME_SIZE - 40)
-            objPlayer.x = FRAME_SIZE - 40;
+        if (objPlayer.x > FRAME_SIZE - 30)
+            objPlayer.x = FRAME_SIZE - 30;
         if (objPlayer.y < 0)
             objPlayer.y = 0;
-        if (objPlayer.y > FRAME_SIZE - 40)
-            objPlayer.y = FRAME_SIZE - 40;
+        if (objPlayer.y > FRAME_SIZE - 30)
+            objPlayer.y = FRAME_SIZE - 30;
+
+
+    }
+
+    public void walkAndCheck(Rectangle o,float x,float y,float w , float h){
+
+
+        if( objPlayer.x > x - 30  &&  objPlayer.x < x +10 &&  objPlayer.y > y - 30  &&  objPlayer.y < y + h ){
+           // CANRIGHT = false;
+
+            VELOCITY_RIGHT = 0;
+
+        }
+        if ( objPlayer.x > x-20  &&  objPlayer.x < x + w &&  objPlayer.y > (y - 30) &&  objPlayer.y < y ){
+
+           // CANUP = false;
+            VELOCITY_UP=0;
+
+
+        }
+        if ( objPlayer.x > x + w -20     &&  objPlayer.x < x + w +20  &&  objPlayer.y > y -30 &&  objPlayer.y < y + h ){
+            //CANLEFT = false;
+            VELOCITY_LEFT = 0;
+        }
+        if ( objPlayer.x > x - 20  &&  objPlayer.x < x + w - 10 &&  objPlayer.y > y-20  &&  objPlayer.y < y + h ){
+            //CANDOWN = false;
+            VELOCITY_DOWN = 0;
+        }
+        else{
+           //VELOCITY_UP =  VELOCITY_RIGHT =   VELOCITY_LEFT =    VELOCITY_DOWN  = 150;
+            Gdx.app.log("V ",VELOCITY_DOWN+" "+VELOCITY_UP+" "+VELOCITY_RIGHT+" "+VELOCITY_LEFT);
+        }
+
+
 
 
     }

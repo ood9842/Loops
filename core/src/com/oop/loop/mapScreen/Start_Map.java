@@ -6,14 +6,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oop.loop.sprite.Hero;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -27,13 +31,12 @@ public class Start_Map implements Screen{
     private SpriteBatch batch;
     //TOOL
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    //map
-    private TmxMapLoader mapLoader;
-    private TiledMap map;
-    private OrthoCachedTiledMapRenderer paintMap;
     //game camera to cooperation map
     private OrthographicCamera gameCam;
     private Viewport gamePort;
+    private Wolrd_Map map;
+    private OrthogonalTiledMapRenderer paintMap;
+    private ArrayList<Rectangle> not_pass = new ArrayList<Rectangle>();
     //gate
     private Rectangle gate_left;
     private Rectangle gate_right;
@@ -57,9 +60,9 @@ public class Start_Map implements Screen{
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(SIZE,SIZE,gameCam);
         //set map
-        mapLoader =new TmxMapLoader();
-        map = mapLoader.load("map_stage\\start_map.tmx");
-        paintMap = new OrthoCachedTiledMapRenderer(map);
+        map = new Wolrd_Map();
+        paintMap = map.getMap(Wolrd_Map.STRAT_MAP);
+        not_pass = map.getReg(Wolrd_Map.STRAT_MAP);
         gameCam.position.set(SIZE/2,SIZE/2,0);//SIZE window / 2 this is pattern
         //create gate and setting gate
         gate_left = new Rectangle(0,270,GRID_CELL,GRID_CELL*2);
@@ -110,13 +113,13 @@ public class Start_Map implements Screen{
             {
                 count = 0;
                 player.setObjPlayerPosition(532,284);//equal gate
-                map = mapLoader.load("map_stage\\quiz_map1.tmx");
-                paintMap = new OrthoCachedTiledMapRenderer(map);
+                paintMap = map.getMap(Wolrd_Map.QUIZ_MAP1);
+                not_pass = map.getReg(Wolrd_Map.QUIZ_MAP1);
             }
             else
             {
-                map = mapLoader.load("map_stage\\default_map.tmx");
-                paintMap = new OrthoCachedTiledMapRenderer(map);
+                paintMap = map.getMap(Wolrd_Map.DEFAULT_MAP);
+                not_pass = map.getReg(Wolrd_Map.DEFAULT_MAP);
                 if(late_enter =="LEFT")
                 {
                     player.setObjPlayerPosition(532, (int) Py);
@@ -143,13 +146,36 @@ public class Start_Map implements Screen{
             count = 0;
             get_gate = -1;
             player.setObjPlayerPosition(532, 286);//equal gate
-            map = mapLoader.load("map_stage\\start_map.tmx");
-            paintMap = new OrthoCachedTiledMapRenderer(map);
+            paintMap = map.getMap(Wolrd_Map.STRAT_MAP);
+            not_pass = map.getReg(Wolrd_Map.STRAT_MAP);
         }
         drawGate();
     }
 
     private void checkGate() {
+        Rectangle tmp = new Rectangle();
+        for (Rectangle not_pas : not_pass) {
+
+            if (not_pas.overlaps(player.getObjPlayer())) {
+
+                tmp = not_pas;
+                player.walkAndCheck(tmp,tmp.getX(), tmp.getY(), tmp.getWidth(), tmp.getHeight());
+                Gdx.app.log("V",  not_pas.getX()+" "+  not_pas.getY()+" "+   not_pas.getWidth()+" "+  not_pas.getHeight());
+                Gdx.app.log("P ", player.getObjectPositionX()+" "+  player.getObjectPositionY());
+
+
+            }
+            if(!tmp.overlaps(player.getObjPlayer())){
+
+                player.VELOCITY_UP =  player.VELOCITY_RIGHT =   player.VELOCITY_LEFT =    player.VELOCITY_DOWN  = 150;
+            }
+            else {
+                player.CANRIGHT = true;
+                player.CANUP =true;
+                player.CANLEFT = true;
+                player.CANDOWN = true;
+            }
+        }
         if(gate_left.overlaps(player.getObjPlayer()))
         {
             Px = player.getObjectPositionX();
@@ -213,8 +239,12 @@ public class Start_Map implements Screen{
         shapeRenderer.rect(gate_right.getX(),gate_right.getY(),gate_right.getWidth(),gate_right.getHeight());
         shapeRenderer.rect(gate_up.getX(),gate_up.getY(),gate_up.getWidth(),gate_up.getHeight());
         shapeRenderer.rect(gate_down.getX(),gate_down.getY(),gate_down.getWidth(),gate_down.getHeight());
+        for(Rectangle temp:not_pass)
+        {
+            shapeRenderer.rect(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight());
+        }
         shapeRenderer.end();
-        System.out.println(true_gate+" "+count);
+        //System.out.println(true_gate+" "+count);
     }
 
     private void drawGrid() {
