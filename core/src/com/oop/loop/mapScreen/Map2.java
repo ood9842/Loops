@@ -41,13 +41,18 @@ public class Map2 implements Screen{
     //gate
     private Rectangle gate_left;
     private boolean change=false;
+    private boolean isFound = false;
     //player
     private Hero player;
     private float Px=300,Py=300;
     //chat box and NPC
-    private Texture mesg;
+    private ArrayList<Texture> mesg;
+    private int order = 0;
+    private int counter = 0;
+    private Texture cp;
     private NPC pk1;
     private boolean talking = false;
+    private int isTalk = 0;
 
     public Map2(SpriteBatch batch)
     {
@@ -74,8 +79,11 @@ public class Map2 implements Screen{
         pk1.setting_size(60,60);
         not_pass.add(pk1.getObjPlayer());
         //create chat box
-        mesg = new Texture(Gdx.files.internal("message\\start\\02.jpg"));
-
+        mesg = new ArrayList<Texture>();
+        for(int i=0 ; i<2 ; i++) {
+            mesg.add(new Texture(Gdx.files.internal("message\\map2\\0"+(i+1)+".jpg")));
+        }
+        cp = new Texture(Gdx.files.internal("message\\map2\\pumpkin 1.jpg"));
     }
 
     @Override
@@ -96,7 +104,6 @@ public class Map2 implements Screen{
 
         if(!talking) {
             batch.begin();
-            batch.draw(mesg,0,0);
             pk1.render();
             player.updateHero(delta);
             player.renderHero(delta);
@@ -107,15 +114,21 @@ public class Map2 implements Screen{
         if(talking)//script
         {
             batch.begin();
-            batch.draw(mesg, 0, 0);
+            batch.draw(mesg.get(order), 0, 0);
             batch.draw(new Texture(Gdx.files.internal("new pumkin\\55.png")),30*1,30*8,60,60);
             batch.draw(new Texture(Gdx.files.internal("sprite\\boy\\b7.png")),player.getObjectPositionX(),player.getObjectPositionY(),32,32);
-
             batch.end();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
-                talking = false;
-            }
 
+            if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+                order = 1;
+                counter++;
+            }
+            if(counter>1)
+            {
+                talking = false;
+                counter = 0;
+                isTalk = 2;
+            }
 
         }
     }
@@ -141,20 +154,20 @@ public class Map2 implements Screen{
             }
         }
         //check gate change map
-        if(gate_left.overlaps(player.getObjPlayer()))
+        if(gate_left.overlaps(player.getObjPlayer())&&isFound)
         {
             change = true;
         }
         //
-        if( Gdx.input.isKeyJustPressed(Input.Keys.C)&&pk1.getObjPlayer().overlaps(player.getObjPlayer())){
+        if( Gdx.input.isKeyJustPressed(Input.Keys.X)&&pk1.getObjPlayer().overlaps(player.getObjPlayer())&&isTalk==2){
             pk1.changeLocate(30*1,30*11);
+            isFound = true;
         }
 
         //communication
         if(pk1.getObjPlayer().overlaps(player.getObjPlayer())&& Gdx.input.isKeyJustPressed(Input.Keys.Z)){
                         talking = true;
         }
-        batch.draw(mesg,0,0);
     }
 
     @Override

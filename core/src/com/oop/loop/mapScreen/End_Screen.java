@@ -36,7 +36,7 @@ public class End_Screen implements Screen{
         gamePort = new FitViewport(SIZE,SIZE,gameCam);
 
         background = new Texture(Gdx.files.internal("scene\\end scene.jpg"));
-        sound = Gdx.audio.newSound(Gdx.files.internal("sound\\end sound.wav"));
+        sound = Gdx.audio.newSound(Gdx.files.internal("sound\\end sound2.wav"));
     }
 
     public void run()

@@ -89,7 +89,6 @@ public class Map_end implements Screen {
 
         if(show) {
 
-
                 batch.begin();
                 player.updateHero(delta);
                 player.renderHero(delta);
@@ -99,12 +98,11 @@ public class Map_end implements Screen {
                 if(state==0){
 
                     Mur.walkToTargetAxisX(delta*2,30 * 15);
-                    if ((int)Mur.getObjectPositionX() > 30 * 15) {
+                    if ((int)Mur.getObjectPositionX() == (30 * 15)-1) {
                         change = true;
                     }
                 }
                 batch.end();
-
 
         }
        else
