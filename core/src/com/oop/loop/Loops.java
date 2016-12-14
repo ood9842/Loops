@@ -30,7 +30,7 @@ public class Loops extends Game {
 		m4 = new Map4(batch);
 		m5 = new Map5(batch);
 		m6 = new Map6(batch);
-		this.setScreen(m6);
+		this.setScreen(start);
 	}
 
 	@Override
@@ -55,13 +55,6 @@ public class Loops extends Game {
 		if(m1.changeMap())
 		{
 			this.setScreen(m2);
-			/*m1 = new Map1(batch);
-			die.run();
-			System.out.println(die.toString());
-			do {
-				this.setScreen(die);
-			}while(TimeUtils.nanoTime() - die.timeStart()> 1000000000);
-			this.setScreen(m1);*/
 			m1 = new Map1(batch);
 		}
 		//map 2
@@ -123,4 +116,11 @@ public class Loops extends Game {
 	public void dispose () {
 		batch.dispose();
 	}
+	/*m1 = new Map1(batch);
+			die.run();
+			System.out.println(die.toString());
+			do {
+				this.setScreen(die);
+			}while(TimeUtils.nanoTime() - die.timeStart()> 1000000000);
+			this.setScreen(m1);*/
 }
