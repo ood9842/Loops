@@ -3,6 +3,8 @@ package com.oop.loop.mapScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,6 +24,8 @@ public class Start_Screen implements Screen {
     private Viewport gamePort;
     //graphic batch
     private Loops game;
+    //sound
+    private Sound sound;
     //image
     private Texture background;
     private Texture bottom_start;
@@ -44,10 +48,11 @@ public class Start_Screen implements Screen {
         bottom_start = new Texture(Gdx.files.internal("sprite\\menu\\start.png"));
         bottom_exit = new Texture(Gdx.files.internal("sprite\\menu\\exit.png"));
         select = new Texture(Gdx.files.internal("sprite\\menu\\select.png"));
+        sound = Gdx.audio.newSound(Gdx.files.internal("sound\\start.wav"));
     }
     @Override
     public void show() {
-
+        sound.play();
     }
 
     @Override
@@ -81,10 +86,12 @@ public class Start_Screen implements Screen {
             if(cur_select)
             {
                 change = 1;
+                this.dispose();
             }
             else
             {
                 change = 0;
+                this.dispose();
             }
         }
     }
@@ -116,6 +123,6 @@ public class Start_Screen implements Screen {
 
     @Override
     public void dispose() {
-
+        sound.dispose();
     }
 }

@@ -16,13 +16,14 @@ public class Loops extends Game {
 	private Map4 m4;
 	private Map5 m5;
 	private Map6 m6;
+	private Map_end end_map;
 	//scene
 	private Die_scene die;
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		die = new Die_scene(batch);
-		start = new Start_Screen(this);
+		start = new Start_Screen(this);;
 		end = new End_Screen(this);
 		m1 = new Map1(batch);
 		m2 = new Map2(batch);
