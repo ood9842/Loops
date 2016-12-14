@@ -81,12 +81,12 @@ public class Map1 implements Screen {
     public void render(float delta) {
         //set point to render map
         paintMap.setView(gameCam);
-        if(!show)
+       /* if(!show)
         {
             if(moving)
             {
                 float update_Px = player.getObjectPositionX()+ directionX * SPREED * DELAY;//new meteor render in hero class
-                float update_Py = player.getObjectPositionY()+ directionX * SPREED * DELAY;
+                float update_Py = player.getObjectPositionY()+ directionY * SPREED * DELAY;
                 player.setObjPlayerPosition((int)update_Px,(int)update_Py);
                 if(Math.sqrt(Math.pow(player.getObjectPositionX()-start.x,2)+Math.pow(player.getObjectPositionY()-start.y,2)) >= distance)
                 {
@@ -95,7 +95,7 @@ public class Map1 implements Screen {
                     show = true;
                 }
            }
-         }
+         }*/
         //clear screen
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
