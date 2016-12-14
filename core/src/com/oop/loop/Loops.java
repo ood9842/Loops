@@ -76,7 +76,12 @@ public class Loops extends Game {
 			m6 = new Map6(batch);
 		}
 	}
-	
+
+	public SpriteBatch gatBatch()
+	{
+		return this.batch;
+	}
+
 	@Override
 	public void dispose () {
 		batch.dispose();
