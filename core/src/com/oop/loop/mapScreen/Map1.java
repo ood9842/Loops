@@ -114,7 +114,7 @@ public class Map1 implements Screen {
             {
                 order++;
             }
-            if(order>5)
+            if(order>4)
             {
                 //create player before script
                 player = new Hero(this.batch);
