@@ -54,7 +54,6 @@ public class Map1 implements Screen {
     /*private boolean show = false;
     private Vector2 start;
     private Vector2 end;
-
     private static float SPREED = 100;
     private static float DELAY = 0.0f;
     private float directionX;
