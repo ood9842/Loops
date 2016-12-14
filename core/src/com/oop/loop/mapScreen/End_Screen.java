@@ -3,6 +3,7 @@ package com.oop.loop.mapScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,11 +11,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oop.loop.Loops;
 
-
 /**
  * Created by Chetsada Chaiprasop on 12/14/2016.
  */
-public class Start_Screen implements Screen {
+public class End_Screen implements Screen{
     //window property
     private static final int SIZE = 600;
     //camera
@@ -24,26 +24,24 @@ public class Start_Screen implements Screen {
     private Loops game;
     //image
     private Texture background;
-    private Texture bottom_start;
-    private Texture bottom_exit;
-    private static int POINT_STARTX = 250,POINT_STARTY = 200;
-    private static int POINT_ENDX = 250,POINT_ENDY = 130;
-    //selection
-    private Texture select;
-    private boolean cur_select = true;
-    private int change = -1;
+    private boolean change = false;
+    //audio
+    private Sound sound;
 
-    public Start_Screen(final Loops gameReseice)
+    public End_Screen(final Loops gameReseice)
     {
         this.game = gameReseice;
 
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(SIZE,SIZE,gameCam);
 
-        background = new Texture(Gdx.files.internal("scene\\start scene.jpg"));
-        bottom_start = new Texture(Gdx.files.internal("sprite\\menu\\start.png"));
-        bottom_exit = new Texture(Gdx.files.internal("sprite\\menu\\exit.png"));
-        select = new Texture(Gdx.files.internal("sprite\\menu\\select.png"));
+        background = new Texture(Gdx.files.internal("scene\\end scene.jpg"));
+        sound = Gdx.audio.newSound(Gdx.files.internal("sound\\end sound.wav"));
+    }
+
+    public void run()
+    {
+        sound.play();
     }
     @Override
     public void show() {
@@ -56,40 +54,18 @@ public class Start_Screen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.gatBatch().begin();
         game.gatBatch().draw(background,0,0);
-        game.gatBatch().draw(bottom_start,POINT_STARTX,POINT_STARTY);
-        game.gatBatch().draw(bottom_exit,POINT_ENDX,POINT_ENDY);
-        if(cur_select)
-        {
-            game.gatBatch().draw(select,POINT_STARTX,POINT_STARTY);
-        }
-        else
-        {
-            game.gatBatch().draw(select,POINT_ENDX,POINT_ENDY);
-        }
         game.gatBatch().end();
-
         check_bottom();
     }
 
     private void check_bottom() {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP)||Gdx.input.isKeyJustPressed(Input.Keys.DOWN))
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))
         {
-            cur_select = !cur_select;
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER))
-        {
-            if(cur_select)
-            {
-                change = 1;
-            }
-            else
-            {
-                change = 0;
-            }
+            change = true;
         }
     }
 
-    public int changeMap()
+    public boolean changeMap()
     {
         return change;
     }

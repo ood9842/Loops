@@ -1,9 +1,11 @@
 package com.oop.loop.mapScreen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -41,14 +43,20 @@ public class Map1 implements Screen {
     private float Px=150,Py=150;
     //script
     private boolean show = false;
+    private ArrayList<Texture> mesg;
+    private int order = 0;
+    //test
+    /*private boolean show = false;
     private Vector2 start;
     private Vector2 end;
+
     private static float SPREED = 100;
     private static float DELAY = 0.0f;
     private float directionX;
     private float directionY;
     private float distance;
     private boolean moving;
+    */
 
     public Map1(SpriteBatch batch)
     {
@@ -64,12 +72,13 @@ public class Map1 implements Screen {
         gameCam.position.set(SIZE/2,SIZE/2,0);//SIZE window / 2 this is pattern
         //create gate and setting gate
         gate_left = new Rectangle(0,270,GRID_CELL,GRID_CELL*2);
-        //create player in to scrip
-        player = new Hero(this.batch);
-        player.create();
-        player.setObjPlayerPosition((int)Px,(int)Py);
         //script
-        setVector((int)Px,(int)Px,100,100);
+        mesg = new ArrayList<Texture>();
+        for(int i=0;i<5;i++)
+        {
+            mesg.add(new Texture("message\\start\\0"+(i+1)+".jpg"));
+        }
+        //test setVector((int)Px,(int)Px,100,100);
     }
 
     @Override
@@ -81,21 +90,6 @@ public class Map1 implements Screen {
     public void render(float delta) {
         //set point to render map
         paintMap.setView(gameCam);
-        if(!show)
-        {
-            if(moving)
-            {
-                float update_Px = player.getObjectPositionX()+ directionX * SPREED * DELAY;//new meteor render in hero class
-                float update_Py = player.getObjectPositionY()+ directionX * SPREED * DELAY;
-                player.setObjPlayerPosition((int)update_Px,(int)update_Py);
-                if(Math.sqrt(Math.pow(player.getObjectPositionX()-start.x,2)+Math.pow(player.getObjectPositionY()-start.y,2)) >= distance)
-                {
-                    player.setObjPlayerPosition((int)end.x,(int)end.y);
-                    moving = false;
-                    show = true;
-                }
-           }
-         }
         //clear screen
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -103,12 +97,32 @@ public class Map1 implements Screen {
         batch.setProjectionMatrix(gameCam.combined);
         paintMap.render();
         //draw player
-        batch.begin();
-        player.updateHero(delta);
-        player.renderHero(delta);
-        process();
-        drawGate();
-        batch.end();
+        if(show) {
+            batch.begin();
+            player.updateHero(delta);
+            player.renderHero(delta);
+            batch.end();
+            process();
+            drawGate();
+        }
+        if(!show)
+        {
+            batch.begin();
+            batch.draw(mesg.get(order), 0, 0);
+            batch.end();
+            if(Gdx.input.isKeyJustPressed(Input.Keys.X))
+            {
+                order++;
+            }
+            if(order>5)
+            {
+                //create player before script
+                player = new Hero(this.batch);
+                player.create();
+                player.setObjPlayerPosition((int)Px,(int)Py);
+                show = true;
+            }
+        }
     }
 
     private void process() {
@@ -193,7 +207,7 @@ public class Map1 implements Screen {
         System.out.println(player.getObjPlayer());
     }
 
-    private void setVector(int sx,int sy,int ex,int ey)
+    /*private void setVector(int sx,int sy,int ex,int ey)
     {
         start = new Vector2(sx,sy);
         end = new Vector2(ex,ey);
@@ -202,4 +216,16 @@ public class Map1 implements Screen {
         directionY = end.y-end.y;
         moving = true;
     }
+    /*if(moving)
+            {
+                float update_Px = player.getObjectPositionX()+ directionX * SPREED * DELAY;//new meteor render in hero class
+                float update_Py = player.getObjectPositionY()+ directionY * SPREED * DELAY;
+                player.setObjPlayerPosition((int)update_Px,(int)update_Py);
+                if(Math.sqrt(Math.pow(player.getObjectPositionX()-start.x,2)+Math.pow(player.getObjectPositionY()-start.y,2)) >= distance)
+                {
+                    player.setObjPlayerPosition((int)end.x,(int)end.y);
+                    moving = false;
+                    show = true;
+                }
+           }*/
 }

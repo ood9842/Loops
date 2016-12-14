@@ -118,22 +118,22 @@ public class Map6 implements Screen {
         {
             get_gate = 1;
         }
-        if(gate_left.overlaps(player.getObjPlayer()))
+        if(gate_right.overlaps(player.getObjPlayer()))
         {
             get_gate = 2;
         }
-        if(gate_left.overlaps(player.getObjPlayer()))
+        if(gate_up.overlaps(player.getObjPlayer()))
         {
             get_gate = 3;
         }
-        if(gate_left.overlaps(player.getObjPlayer()))
+        if(gate_down.overlaps(player.getObjPlayer()))
         {
             get_gate = 4;
         }
         //check true gate
         if(get_gate!=true_gate&&get_gate!=0)
         {
-            door = 2;
+            door = 1;
         }
         if(get_gate==true_gate)
         {
