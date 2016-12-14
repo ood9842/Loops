@@ -75,6 +75,7 @@ public class Map2 implements Screen{
         not_pass.add(pk1.getObjPlayer());
         //create chat box
         mesg = new Texture(Gdx.files.internal("message\\start\\02.jpg"));
+
     }
 
     @Override
@@ -92,20 +93,31 @@ public class Map2 implements Screen{
         batch.setProjectionMatrix(gameCam.combined);
         paintMap.render();
         //draw player
-        batch.begin();
-        pk1.render();
-        player.updateHero(delta);
-        player.renderHero(delta);
-        process();
-        drawGate();
-        if(talking) {
-            System.out.println("dd");
+
+        if(!talking) {
+            batch.begin();
             batch.draw(mesg,0,0);
+            pk1.render();
+            player.updateHero(delta);
+            player.renderHero(delta);
+            process();
+            drawGate();
+            batch.end();
+        }
+        if(talking)//script
+        {
+            batch.begin();
+            batch.draw(mesg, 0, 0);
+            batch.draw(new Texture(Gdx.files.internal("new pumkin\\55.png")),30*1,30*8,60,60);
+            batch.draw(new Texture(Gdx.files.internal("sprite\\boy\\b7.png")),player.getObjectPositionX(),player.getObjectPositionY(),32,32);
+
+            batch.end();
             if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
                 talking = false;
             }
+
+
         }
-        batch.end();
     }
 
     private void process() {
@@ -134,19 +146,15 @@ public class Map2 implements Screen{
             change = true;
         }
         //
-        if( Gdx.input.isKeyJustPressed(Input.Keys.X)&&pk1.getObjPlayer().overlaps(player.getObjPlayer())){
+        if( Gdx.input.isKeyJustPressed(Input.Keys.C)&&pk1.getObjPlayer().overlaps(player.getObjPlayer())){
             pk1.changeLocate(30*1,30*11);
         }
 
         //communication
         if(pk1.getObjPlayer().overlaps(player.getObjPlayer())&& Gdx.input.isKeyJustPressed(Input.Keys.Z)){
-            Timer.schedule(new Timer.Task(){
-                    @Override
-                    public void run() {
                         talking = true;
-                    }
-                }, 0);
         }
+        batch.draw(mesg,0,0);
     }
 
     @Override

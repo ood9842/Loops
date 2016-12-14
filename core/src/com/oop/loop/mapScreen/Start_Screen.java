@@ -49,6 +49,7 @@ public class Start_Screen implements Screen {
         bottom_exit = new Texture(Gdx.files.internal("sprite\\menu\\exit.png"));
         select = new Texture(Gdx.files.internal("sprite\\menu\\select.png"));
         sound = Gdx.audio.newSound(Gdx.files.internal("sound\\start.wav"));
+
     }
     @Override
     public void show() {

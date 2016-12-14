@@ -114,7 +114,6 @@ public class Map4 implements Screen {
         }
 
 
-        ///
         process();
         drawGate();
         batch.end();

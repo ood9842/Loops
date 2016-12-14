@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oop.loop.sprite.Hero;
+import com.oop.loop.sprite.murderer;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,15 @@ public class Map_end implements Screen {
     //change
     private boolean change = false;
 
+    Texture boy;
+    Texture girl;
+    boolean script = false;
+
+    private int state = 0;
+
+    private Hero player;
+    private murderer Mur;
+
     public Map_end(SpriteBatch batch) {
         this.batch = batch;
         gameCam = new OrthographicCamera();
@@ -55,6 +65,9 @@ public class Map_end implements Screen {
         {
             mesg.add(new Texture("message\\end\\0"+(i+1)+".jpg"));
         }
+
+        boy = new Texture("sprite\\boy\\b5.png");
+        girl = new Texture("sprite\\girl\\g9.png");
     }
 
     @Override
@@ -73,13 +86,33 @@ public class Map_end implements Screen {
         batch.setProjectionMatrix(gameCam.combined);
         paintMap.render();
         //draw player
+
         if(show) {
-           change = true;
+
+
+                batch.begin();
+                player.updateHero(delta);
+                player.renderHero(delta);
+                Mur.updateHero(delta);
+                Mur.renderHero(delta);
+
+                if(state==0){
+
+                    Mur.walkToTargetAxisX(delta*2,30 * 15);
+                    if ((int)Mur.getObjectPositionX() > 30 * 15) {
+                        change = true;
+                    }
+                }
+                batch.end();
+
+
         }
-        if(!show)
+       else
         {
             batch.begin();
             batch.draw(mesg.get(order), 0, 0);
+            batch.draw(boy, 30 * 15, 30 * 10);
+            batch.draw(girl, 30 * 4, 30 * 10);
             batch.end();
             if(Gdx.input.isKeyJustPressed(Input.Keys.X))
             {
@@ -87,6 +120,12 @@ public class Map_end implements Screen {
             }
             if(order>4)
             {
+                player = new Hero(this.batch);
+                Mur = new murderer(this.batch);
+                player.create();
+                Mur.create();
+                player.setObjPlayerPosition(30 * 15, 30 * 10);
+                Mur.setObjPlayerPosition(30 * 4, 30 * 10);
                 show = true;
             }
         }
