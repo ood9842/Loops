@@ -115,6 +115,14 @@ public class Chess implements ApplicationListener {
 
         batch.end();
     }
+    public void update(int x, int y) {
+        batch.begin();
+
+        batch.draw(player, x, y, objPlayer.width, objPlayer.height);
+
+        batch.end();
+    }
+
 
     @Override
     public void pause() {
@@ -128,14 +136,14 @@ public class Chess implements ApplicationListener {
 
 
 
-    public void walkToTargetGridX(float deltaTime, float x){
+    public void walkToTargetGridX(float deltaTime, int x){
 
-        if (this.getObjectPositionX() < x*30) {
+        if ((int)this.getObjectPositionX() < x*30) {
 
             this.setObjPlayerPosition(this.getObjectPositionX() + (150*deltaTime), this.getObjectPositionY());
 
         }
-        if (this.getObjectPositionX() > x*30) {
+        if ((int)this.getObjectPositionX() > x*30) {
 
             this.setObjPlayerPosition(this.getObjectPositionX() - (100*deltaTime), this.getObjectPositionY());
 
@@ -143,14 +151,14 @@ public class Chess implements ApplicationListener {
 
     }
 
-    public void walkToTargetGridY(float deltaTime, float y){
+    public void walkToTargetGridY(float deltaTime, int y){
 
-        if (this.getObjectPositionY() < y*30) {
+        if ((int)this.getObjectPositionY() < y*30) {
 
-            this.setObjPlayerPosition(this.getObjectPositionX() , this.getObjectPositionY() + (150*deltaTime));
+            this.setObjPlayerPosition(this.getObjectPositionX() , this.getObjectPositionY() + (100*deltaTime));
 
         }
-        if (this.getObjectPositionY() > y*30) {
+        if ((int)this.getObjectPositionY() > y*30) {
 
             this.setObjPlayerPosition(this.getObjectPositionX() , this.getObjectPositionY() - (100*deltaTime));
 
