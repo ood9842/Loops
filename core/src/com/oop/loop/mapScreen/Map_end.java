@@ -33,9 +33,6 @@ public class Map_end implements Screen {
     private Wolrd_Map map;
     private OrthogonalTiledMapRenderer paintMap;
     private ArrayList<Rectangle> not_pass = new ArrayList<Rectangle>();
-    //player
-    private Hero player;
-    private float Px=150,Py=150;
     //script
     private boolean show = false;
     private ArrayList<Texture> mesg;
@@ -90,10 +87,6 @@ public class Map_end implements Screen {
             }
             if(order>4)
             {
-                //create player before script
-                player = new Hero(this.batch);
-                player.create();
-                player.setObjPlayerPosition((int)Px,(int)Py);
                 show = true;
             }
         }

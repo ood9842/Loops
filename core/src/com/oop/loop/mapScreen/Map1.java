@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oop.loop.sprite.Hero;
 import com.oop.loop.sprite.murderer;
 
-import javax.swing.plaf.synth.Region;
 import java.util.ArrayList;
 
 
@@ -49,17 +47,6 @@ public class Map1 implements Screen {
     private ArrayList<Texture> mesg;
     private int order = 0;
     private int state = 0;
-    //test
-    /*private boolean show = false;
-    private Vector2 start;
-    private Vector2 end;
-    private static float SPREED = 100;
-    private static float DELAY = 0.0f;
-    private float directionX;
-    private float directionY;
-    private float distance;
-    private boolean moving;
-    */
 
     Texture boy;
     Texture girl;
@@ -157,7 +144,6 @@ public class Map1 implements Screen {
                 player.setObjPlayerPosition((int)Px,(int)Py);
                 Mur.setObjPlayerPosition((int)Px,(int)Py+30);
                 show = true;
-
             }
 
 
@@ -254,26 +240,4 @@ public class Map1 implements Screen {
     private void showPositionPlayer() {
         System.out.println(player.getObjPlayer());
     }
-
-    /*private void setVector(int sx,int sy,int ex,int ey)
-    {
-        start = new Vector2(sx,sy);
-        end = new Vector2(ex,ey);
-        distance = (float) Math.sqrt(Math.pow(end.x-start.x,2)+Math.pow(end.y-start.y,2));
-        directionX = end.x-start.x;
-        directionY = end.y-end.y;
-        moving = true;
-    }
-    /*if(moving)
-            {
-                float update_Px = player.getObjectPositionX()+ directionX * SPREED * DELAY;//new meteor render in hero class
-                float update_Py = player.getObjectPositionY()+ directionY * SPREED * DELAY;
-                player.setObjPlayerPosition((int)update_Px,(int)update_Py);
-                if(Math.sqrt(Math.pow(player.getObjectPositionX()-start.x,2)+Math.pow(player.getObjectPositionY()-start.y,2)) >= distance)
-                {
-                    player.setObjPlayerPosition((int)end.x,(int)end.y);
-                    moving = false;
-                    show = true;
-                }
-           }*/
 }

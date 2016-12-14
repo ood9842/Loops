@@ -5,10 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -42,11 +44,10 @@ public class Map2 implements Screen{
     //player
     private Hero player;
     private float Px=300,Py=300;
-
+    //chat box and NPC
+    private Texture mesg;
     private NPC pk1;
-    private NPC pk2;
-
-
+    private boolean talking = false;
 
     public Map2(SpriteBatch batch)
     {
@@ -66,22 +67,18 @@ public class Map2 implements Screen{
         player = new Hero(this.batch);
         player.create();
         player.setObjPlayerPosition((int)Px,(int)Py);
-
-       pk1 = new NPC(this.batch);
-       pk2 = new NPC(this.batch);
-       pk1.setting("new pumkin\\55.png",30*1,(30*8));
-       pk2.setting("new pumkin\\55.png",30*1,(30*9));
-       pk1.create();
-       pk2.create();
-       not_pass.add(pk1.getObjPlayer());
-       not_pass.add(pk2.getObjPlayer());
-
-
+        //create NPC
+        pk1 = new NPC(this.batch);
+        pk1.setting_Position("new pumkin\\55.png",30*1,(30*8));
+        pk1.create();
+        pk1.setting_size(60,60);
+        not_pass.add(pk1.getObjPlayer());
+        //create chat box
+        mesg = new Texture(Gdx.files.internal("message\\start\\02.jpg"));
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -97,11 +94,17 @@ public class Map2 implements Screen{
         //draw player
         batch.begin();
         pk1.render();
-        pk2.render();
         player.updateHero(delta);
         player.renderHero(delta);
         process();
         drawGate();
+        if(talking) {
+            System.out.println("dd");
+            batch.draw(mesg,0,0);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+                talking = false;
+            }
+        }
         batch.end();
     }
 
@@ -131,39 +134,18 @@ public class Map2 implements Screen{
             change = true;
         }
         //
-        if( Gdx.input.isKeyJustPressed(Input.Keys.X)){
-
-            pk2.changeLocate(30*1,30*11);
-
-
+        if( Gdx.input.isKeyJustPressed(Input.Keys.X)&&pk1.getObjPlayer().overlaps(player.getObjPlayer())){
+            pk1.changeLocate(30*1,30*11);
         }
 
         //communication
         if(pk1.getObjPlayer().overlaps(player.getObjPlayer())&& Gdx.input.isKeyJustPressed(Input.Keys.Z)){
-
-
-                Timer.schedule(new Timer.Task(){
+            Timer.schedule(new Timer.Task(){
                     @Override
                     public void run() {
-                        System.out.println("Hello!!");
-                        System.out.println("Hello from pk1");                   // Task quota
+                        talking = true;
                     }
-                }, 1);
-
-
-        }
-        else if(pk2.getObjPlayer().overlaps(player.getObjPlayer())&& Gdx.input.isKeyJustPressed(Input.Keys.Z)){
-
-
-            Timer.schedule(new Timer.Task(){
-                @Override
-                public void run() {
-                    System.out.println("Hello!!");
-                    System.out.println("Hello from pk2");                // Task quota
-                }
-            }, 1);
-
-
+                }, 0);
         }
     }
 
@@ -223,6 +205,5 @@ public class Map2 implements Screen{
     }
 
     public void update(){}
-
 }
 

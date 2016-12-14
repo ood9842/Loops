@@ -41,10 +41,8 @@ public class NPC  implements ApplicationListener {
         objPlayer.setPosition(x,y);
         objPlayer.width = OBJECT_WIDHT;
         objPlayer.height = OBJECT_HIEGHT;
-
-       // Gdx.app.log("", String.valueOf(objPlayer.getX()) + String.valueOf(objPlayer.getY()));
-
     }
+
     public Rectangle getObjPlayer() {
         return objPlayer;
     }
@@ -53,11 +51,16 @@ public class NPC  implements ApplicationListener {
     public void resize(int width, int height) {
 
     }
-    public void setting(String local, int x , int y )
+    public void setting_Position(String local, int x , int y )
     {  this.local = local;
         this.x = x;
         this.y = y;
+    }
 
+    public void setting_size(int widht,int hieght)
+    {
+        objPlayer.width = widht;
+        objPlayer.height = hieght;
     }
 
     public void changeLocate( int x , int y )
@@ -65,7 +68,6 @@ public class NPC  implements ApplicationListener {
         this.x = (int) (objPlayer.x = x);
         this.y = (int) (objPlayer.y = y);
           render();
-
     }
 
     @Override
@@ -75,8 +77,6 @@ public class NPC  implements ApplicationListener {
         batch.draw(player, objPlayer.x, objPlayer.y, objPlayer.width, objPlayer.height);
 
         batch.end();
-
-
     }
 
     @Override
