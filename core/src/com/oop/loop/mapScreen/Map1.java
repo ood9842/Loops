@@ -15,7 +15,6 @@ import com.oop.loop.sprite.Hero;
 
 import java.util.ArrayList;
 
-import static com.badlogic.gdx.utils.JsonValue.ValueType.object;
 
 /**
  * Created by Chetsada Chaiprasop on 12/13/2016.
