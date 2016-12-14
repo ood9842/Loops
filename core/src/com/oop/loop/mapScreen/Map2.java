@@ -1,6 +1,7 @@
 package com.oop.loop.mapScreen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -8,11 +9,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oop.loop.sprite.Hero;
+import com.oop.loop.sprite.NPC;
 
 import java.util.ArrayList;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
 
 /**
  * Created by Chetsada Chaiprasop on 12/13/2016.
@@ -38,6 +43,11 @@ public class Map2 implements Screen{
     private Hero player;
     private float Px=300,Py=300;
 
+    private NPC pk1;
+    private NPC pk2;
+
+
+
     public Map2(SpriteBatch batch)
     {
         //receive graphic from Loops class
@@ -56,6 +66,17 @@ public class Map2 implements Screen{
         player = new Hero(this.batch);
         player.create();
         player.setObjPlayerPosition((int)Px,(int)Py);
+
+       pk1 = new NPC(this.batch);
+       pk2 = new NPC(this.batch);
+       pk1.setting("new pumkin\\55.png",30*1,(30*8));
+       pk2.setting("new pumkin\\55.png",30*1,(30*9));
+       pk1.create();
+       pk2.create();
+       not_pass.add(pk1.getObjPlayer());
+       not_pass.add(pk2.getObjPlayer());
+
+
     }
 
     @Override
@@ -75,6 +96,8 @@ public class Map2 implements Screen{
         paintMap.render();
         //draw player
         batch.begin();
+        pk1.render();
+        pk2.render();
         player.updateHero(delta);
         player.renderHero(delta);
         process();
@@ -89,6 +112,7 @@ public class Map2 implements Screen{
             if (not_pas.overlaps(player.getObjPlayer())) {
                 tmp = not_pas;
                 player.walkAndCheck(tmp,tmp.getX(), tmp.getY(), tmp.getWidth(), tmp.getHeight());
+
             }
             if(!tmp.overlaps(player.getObjPlayer())){
                 player.VELOCITY_UP =  player.VELOCITY_RIGHT =   player.VELOCITY_LEFT =    player.VELOCITY_DOWN  = 150;
@@ -105,6 +129,41 @@ public class Map2 implements Screen{
         if(gate_left.overlaps(player.getObjPlayer()))
         {
             change = true;
+        }
+        //
+        if( Gdx.input.isKeyJustPressed(Input.Keys.X)){
+
+            pk2.changeLocate(30*1,30*11);
+
+
+        }
+
+        //communication
+        if(pk1.getObjPlayer().overlaps(player.getObjPlayer())&& Gdx.input.isKeyJustPressed(Input.Keys.Z)){
+
+
+                Timer.schedule(new Timer.Task(){
+                    @Override
+                    public void run() {
+                        System.out.println("Hello!!");
+                        System.out.println("Hello from pk1");                   // Task quota
+                    }
+                }, 1);
+
+
+        }
+        else if(pk2.getObjPlayer().overlaps(player.getObjPlayer())&& Gdx.input.isKeyJustPressed(Input.Keys.Z)){
+
+
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    System.out.println("Hello!!");
+                    System.out.println("Hello from pk2");                // Task quota
+                }
+            }, 1);
+
+
         }
     }
 
@@ -162,5 +221,8 @@ public class Map2 implements Screen{
     private void showPositionPlayer() {
         System.out.println(player.getObjPlayer());
     }
+
+    public void update(){}
+
 }
 

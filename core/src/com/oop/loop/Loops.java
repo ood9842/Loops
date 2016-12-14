@@ -10,7 +10,7 @@ public class Loops extends Game {
 	private SpriteBatch batch;
 	private Start_Screen start;
 	private End_Screen end;
-    private Map1 m1;
+	private Map1 m1;
 	private Map2 m2;
 	private Map3 m3;
 	private Map4 m4;
@@ -91,7 +91,7 @@ public class Loops extends Game {
 		if(m6.changeMap()==1)
 		{
 			//this.setScreen(end);
-            end.run();
+			end.run();
 			this.setScreen(end);
 			m6 = new Map6(batch);
 		}

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -14,7 +15,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oop.loop.sprite.Hero;
+import com.oop.loop.sprite.murderer;
 
+import javax.swing.plaf.synth.Region;
 import java.util.ArrayList;
 
 
@@ -40,11 +43,13 @@ public class Map1 implements Screen {
     private boolean change=false;
     //player
     private Hero player;
+    private murderer Mur;
     private float Px=150,Py=150;
     //script
     private boolean show = false;
     private ArrayList<Texture> mesg;
     private int order = 0;
+    private int state = 0;
     //test
     /*private boolean show = false;
     private Vector2 start;
@@ -57,6 +62,10 @@ public class Map1 implements Screen {
     private float distance;
     private boolean moving;
     */
+
+    Texture boy;
+    Texture girl;
+    boolean script = false;
 
     public Map1(SpriteBatch batch)
     {
@@ -73,12 +82,15 @@ public class Map1 implements Screen {
         //create gate and setting gate
         gate_left = new Rectangle(0,270,GRID_CELL,GRID_CELL*2);
         //script
+
         mesg = new ArrayList<Texture>();
         for(int i=0;i<5;i++)
         {
             mesg.add(new Texture("message\\start\\0"+(i+1)+".jpg"));
         }
-        //test setVector((int)Px,(int)Px,100,100);
+        boy = new Texture("sprite\\boy\\b15.png");
+        girl = new Texture("sprite\\girl\\g1.png");
+
     }
 
     @Override
@@ -90,25 +102,48 @@ public class Map1 implements Screen {
     public void render(float delta) {
         //set point to render map
         paintMap.setView(gameCam);
+
         //clear screen
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //render at camera and paint map
         batch.setProjectionMatrix(gameCam.combined);
         paintMap.render();
         //draw player
+
         if(show) {
             batch.begin();
             player.updateHero(delta);
             player.renderHero(delta);
+            Mur.updateHero(delta);
+            Mur.renderHero(delta);
+            if (!script){
+                if(state==0){
+                Mur.walkToTargetAxisY(delta,30*9);
+                if ((int)Mur.getObjectPositionY() == 30*9) {
+                    state++;
+                }
+                }
+                if(state==1){
+                    Mur.walkToTargetAxisX(delta,-60);
+                    if ((int)Mur.getObjectPositionY() == -60) {
+                        script = true;
+                    }
+                }
+            }
+
             batch.end();
             process();
             drawGate();
         }
-        if(!show)
+        if(!show)//script
         {
             batch.begin();
             batch.draw(mesg.get(order), 0, 0);
+            if(order > 0) {
+                batch.draw(boy, 30 * 5, 30 * 5);
+                batch.draw(girl, 30 * 5, 30 * 6);
+            }
             batch.end();
             if(Gdx.input.isKeyJustPressed(Input.Keys.X))
             {
@@ -118,11 +153,25 @@ public class Map1 implements Screen {
             {
                 //create player before script
                 player = new Hero(this.batch);
+                Mur = new murderer(this.batch);
                 player.create();
+                Mur.create();
                 player.setObjPlayerPosition((int)Px,(int)Py);
+                Mur.setObjPlayerPosition((int)Px,(int)Py+30);
                 show = true;
+
             }
+
+
         }
+
+
+        ///////////////////
+
+        /////////////////////////////////////
+
+
+
     }
 
     private void process() {
@@ -132,6 +181,7 @@ public class Map1 implements Screen {
             if (not_pas.overlaps(player.getObjPlayer())) {
                 tmp = not_pas;
                 player.walkAndCheck(tmp,tmp.getX(), tmp.getY(), tmp.getWidth(), tmp.getHeight());
+
             }
             if(!tmp.overlaps(player.getObjPlayer())){
                 player.VELOCITY_UP =  player.VELOCITY_RIGHT =   player.VELOCITY_LEFT =    player.VELOCITY_DOWN  = 150;
