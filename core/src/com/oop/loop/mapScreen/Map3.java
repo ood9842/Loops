@@ -1,9 +1,11 @@
 package com.oop.loop.mapScreen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oop.loop.sprite.Hero;
+import com.oop.loop.sprite.NPC;
 
 import java.util.ArrayList;
 
@@ -34,9 +37,21 @@ public class Map3 implements Screen {
     //gate
     private Rectangle gate_left;
     private boolean change=false;
+    private boolean show = false;
+    private int order = 0;
+    private ArrayList<Texture> mesg;
     //player
     private Hero player;
-    private float Px=300,Py=300;
+    private float Px=30*19,Py=30*9;
+
+    boolean question = false;
+    int ans=1;
+    int qAns=0;
+    private NPC pk1;
+    private NPC pk2;
+    private NPC pk3;
+    private NPC pk4;
+    private NPC pk;
 
     public Map3(SpriteBatch batch)
     {
@@ -51,11 +66,52 @@ public class Map3 implements Screen {
         not_pass = map.getReg(Wolrd_Map.QUIZ_MAP2);
         gameCam.position.set(SIZE/2,SIZE/2,0);//SIZE window / 2 this is pattern
         //create gate and setting gate
-        gate_left = new Rectangle(0,270,GRID_CELL,GRID_CELL*2);
+        gate_left = new Rectangle(0,270,GRID_CELL-4,GRID_CELL*2);
         //create player
         player = new Hero(this.batch);
         player.create();
         player.setObjPlayerPosition((int)Px,(int)Py);
+
+        //create NPC
+        pk1 = new NPC(this.batch);
+        pk1.setting_Position("new pumkin\\55.png",30*13,(30*12));
+        pk1.create();
+        pk1.setting_size(30,30);
+        not_pass.add(pk1.getObjPlayer());
+
+        //create NPC
+        pk2 = new NPC(this.batch);
+        pk2.setting_Position("new pumkin\\55.png",30*5,(30*12));
+        pk2.create();
+        pk2.setting_size(30,30);
+        not_pass.add(pk2.getObjPlayer());
+
+        //create NPC
+        pk3 = new NPC(this.batch);
+        pk3.setting_Position("new pumkin\\55.png",30*5,(30*4));
+        pk3.create();
+        pk3.setting_size(30,30);
+        not_pass.add(pk3.getObjPlayer());
+
+        //create NPC
+        pk4 = new NPC(this.batch);
+        pk4.setting_Position("new pumkin\\55.png",30*13,(30*4));
+        pk4.create();
+        pk4.setting_size(30,30);
+        not_pass.add(pk4.getObjPlayer());
+
+        pk = new NPC(this.batch);
+        pk.setting_Position("sprite\\NPC\\01.png",30*1,(30*9));
+        pk.create();
+        pk.setting_size(60,64);
+        not_pass.add(pk.getObjPlayer());
+
+        mesg = new ArrayList<Texture>();
+        for(int i=0;i<5;i++)
+        {
+            mesg.add(new Texture("message\\map3\\pumpkin "+(i+1)+".jpg"));
+        }
+
     }
 
     @Override
@@ -74,12 +130,87 @@ public class Map3 implements Screen {
         batch.setProjectionMatrix(gameCam.combined);
         paintMap.render();
         //draw player
-        batch.begin();
-        player.updateHero(delta);
-        player.renderHero(delta);
-        process();
-        drawGate();
-        batch.end();
+        if(!show){
+            batch.begin();
+            pk1.render();
+            pk2.render();
+            pk3.render();
+            pk4.render();
+            pk.render();
+            player.updateHero(delta);
+            player.renderHero(delta);
+            process();
+            drawGate();
+            batch.end();
+
+        }
+        else{
+            batch.begin();
+            if(!question){
+                batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*12,30,30);
+            batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*12,30,30);
+            batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*4,30,30);
+            batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*4,30,30);
+            }
+            batch.draw(new Texture("sprite\\NPC\\01.png"), 30*1, 30*9,60,64);
+            batch.draw(player.getState(), player.getObjectPositionX(), player.getObjectPositionY(),30,30);
+
+
+            batch.draw(mesg.get(order), 0, 0);   //q2  q1
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+                show = false;
+            }
+            if(question){
+                if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+                    qAns--;
+                }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+                   qAns++;
+                }
+                if(Math.abs(qAns%4)==0){
+                    batch.draw(new Texture("sprite\\NPC\\02.png"), 30*13, 30*12,40,40);
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*12,30,30);
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*4,30,30);
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*4,30,30);
+                }
+                else if(Math.abs(qAns%4)==1){
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*12,30,30);
+                    batch.draw(new Texture("sprite\\NPC\\02.png"), 30*5, 30*12,40,40);
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*4,30,30);
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*4,30,30);
+
+                }
+                else if(Math.abs(qAns%4)==2){
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*12,30,30);
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*12,30,30);
+                    batch.draw(new Texture("sprite\\NPC\\02.png"), 30*5, 30*4,40,40);
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*4,30,30);
+
+                }
+                else if(Math.abs(qAns%4)==3){
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*12,30,30);
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*12,30,30);
+                    batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*4,30,30);
+                    batch.draw(new Texture("sprite\\NPC\\02.png"), 30*13, 30*4,40,40);
+
+                }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+                    //Gdx.app.log("",Math.abs(qAns%4)+" "+ans);
+                    if(Math.abs(qAns%4)==ans){
+                        pk.changeLocate(30*1,30*11);         //q3
+                        show=false;
+                    }
+                    else{
+                        show=false;
+                    }
+                    question = false;
+                }
+
+            }
+            batch.end();
+        }
+
     }
 
     private void process() {
@@ -105,6 +236,27 @@ public class Map3 implements Screen {
         if(gate_left.overlaps(player.getObjPlayer()))
         {
             change = true;
+        }
+        if(player.getObjPlayer().overlaps(pk.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
+            order = 4;
+            question = true;
+            show = true;
+        }
+        if(player.getObjPlayer().overlaps(pk1.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
+            order = 0;
+            show = true;
+        }
+        if(player.getObjPlayer().overlaps(pk2.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
+            order = 1;
+            show = true;
+        }
+        if(player.getObjPlayer().overlaps(pk3.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
+            order = 2;
+            show = true;
+        }
+        if(player.getObjPlayer().overlaps(pk4.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
+            order = 3;
+            show = true;
         }
     }
 

@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+import javax.swing.plaf.synth.Region;
+
 import static com.oop.loop.sprite.State.StandingD;
 
 public class Hero implements ApplicationListener {
@@ -29,7 +31,7 @@ public class Hero implements ApplicationListener {
 
     State state = StandingD;
     State laststate = StandingD;
-
+    TextureRegion frame = null;
 
     TextureAtlas player;
     SpriteBatch batch;
@@ -69,6 +71,11 @@ public class Hero implements ApplicationListener {
     }
     public float getObjectPositionY(){
         return objPlayer.y;
+
+
+    }
+    public TextureRegion getState(){
+        return frame;
 
 
     }
@@ -139,7 +146,7 @@ public class Hero implements ApplicationListener {
 
     public void renderHero(float deltaTime) {
 
-        TextureRegion frame = null;
+
         switch (state) {
             case StandingD:
                 frame = walkDown.getKeyFrame(1);
