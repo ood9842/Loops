@@ -10,7 +10,9 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.oop.loop.sprite.Chess;
 import com.oop.loop.sprite.Hero;
+
 
 import java.util.ArrayList;
 
@@ -36,7 +38,11 @@ public class Map4 implements Screen {
     private boolean change=false;
     //player
     private Hero player;
-    private float Px=300,Py=300;
+    private float Px=30*17,Py=30*9;
+    int state =0;
+
+    Chess ch1;
+    Chess ch2;
 
     public Map4(SpriteBatch batch)
     {
@@ -56,6 +62,15 @@ public class Map4 implements Screen {
         player = new Hero(this.batch);
         player.create();
         player.setObjPlayerPosition((int)Px,(int)Py);
+
+        ////add chess///
+        ch1 = new Chess(this.batch);
+        ch1.setting("sprite\\chess\\1.png",30*3,30*6);
+        ch1.create();
+
+        ch2 = new Chess(this.batch);
+        ch2.setting("sprite\\chess\\2.png",30*3,30*5);
+        ch2.create();
     }
 
     @Override
@@ -77,6 +92,29 @@ public class Map4 implements Screen {
         batch.begin();
         player.updateHero(delta);
         player.renderHero(delta);
+        ////add chess///
+        ch1.render();
+        ch2.render();
+        switch (state) {
+            case 0:
+                ch1.walkToTargetGridX(delta,4);
+                ch1.walkToTargetGridY(delta,5);
+                if(ch1.isMoved(ch1.getObjPlayer(),4,5)){
+                state++;}
+                break;
+            case 1:
+                ch2.walkToTargetGridX(delta,7);
+                ch2.walkToTargetGridY(delta,6);
+                if(ch2.isMoved(ch2.getObjPlayer(),7,6)){
+                    state++;}
+                break;
+            default:
+                break;
+
+        }
+
+
+        ///
         process();
         drawGate();
         batch.end();
