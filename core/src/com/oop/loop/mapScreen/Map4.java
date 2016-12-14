@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -37,25 +36,25 @@ public class Map4 implements Screen {
     private ArrayList<Rectangle> not_pass = new ArrayList<Rectangle>();
     //gate
     private Rectangle gate_left;
-    private boolean change=false;
+    private int change= 0;
     //player
     private Hero player;
-    private float Px=30*17,Py=30*9;
+    private float Px=30*10,Py=30*10;
     int state =0;
 
-    boolean challenge= false;
-    int chessTurn = 1;
-    int gamePosX = 30 * 16;
-    int gamePosY = 30 * 9;
-    Rectangle board;
-    Texture boy;
-
-    Chess ch1;
-    Chess ac;
-    Chess ch2;
+    private Chess king;
+    private Chess queen2;
+    private Chess rook;
+    private Chess queen1;
+    private Chess knight;
+    private Chess bishop;
+    private String last_walk1 = "NONE";
+    private String last_walk2 = "NONE";
+    private String last_walk3 = "NONE";//die
 
     public Map4(SpriteBatch batch)
     {
+        //receive graphic from Loops class
         //receive graphic from Loops class
         this.batch = batch;
         //set camera and viewport
@@ -72,29 +71,26 @@ public class Map4 implements Screen {
         player = new Hero(this.batch);
         player.create();
         player.setObjPlayerPosition((int)Px,(int)Py);
-        ////chess board///
-        board = new Rectangle();
-        board.setPosition(30*3,30*4);
-        board.setSize(30*14,30*11);
 
-        boy = new Texture("sprite\\boy\\b15.png");
-
-
-
-        ////add chess///
-        ch1 = new Chess(this.batch);
-        ch1.setting("sprite\\chess\\1.png",30*3,30*6);
-        ch1.create();
-        not_pass.add(ch1.getObjPlayer());
-
-        ch2 = new Chess(this.batch);
-        ch2.setting("sprite\\chess\\2.png",30*3,30*5);
-        ch2.create();
-        not_pass.add(ch2.getObjPlayer());
-
-        ac = new Chess(this.batch);
-        ac.setting("sprite\\chess\\1.png",30*16,30*9);
-        ac.create();
+        ////add chess/// begin 3*7 end 10*14
+        king = new Chess(this.batch);
+        king.setting("sprite\\chess\\5.png",30*9,30*8);
+        king.create();
+        queen2 = new Chess(this.batch);
+        queen2.setting("sprite\\chess\\6.png",30*3,30*9);
+        queen2.create();
+        rook = new Chess(this.batch);
+        rook.setting("sprite\\chess\\2.png",30*7,30*14);
+        rook.create();
+        knight = new Chess(this.batch);
+        knight.setting("sprite\\chess\\3.png",30*9,30*13);
+        knight.create();
+        bishop = new Chess(this.batch);//fix it
+        bishop.setting("sprite\\chess\\4.png",30*4,30*8);
+        bishop.create();
+        queen1 = new Chess(this.batch);
+        queen1.setting("sprite\\chess\\6.png",30*7,30*7);
+        queen1.create();
     }
 
     @Override
@@ -113,93 +109,89 @@ public class Map4 implements Screen {
         batch.setProjectionMatrix(gameCam.combined);
         paintMap.render();
         //draw player
-
-        if(challenge) {
-            batch.begin();
-            ////add chess///
-            ch1.render();
-            ch2.render();
-
-            ac.update(gamePosX,gamePosY);
-            if(Gdx.input.isKeyJustPressed(Input.Keys.W)&&chessTurn==1){
-                gamePosY += 30;
-                chessTurn = 2;
-
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.S)&&chessTurn==1){
-                gamePosY -= 30;
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.A)&&chessTurn==1){
-                gamePosX -= 30;
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.D)&&chessTurn==1){
-                gamePosX += 30;
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.C)&&chessTurn==1){
-                gamePosX += 30;
-                gamePosY -= 30;
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.E)&&chessTurn==1){
-                gamePosX += 30;
-                gamePosY += 30;
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.Z)&&chessTurn==1){
-                gamePosX -= 30;
-                gamePosY -= 30;
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.Q)&&chessTurn==1){
-                gamePosX -= 30;
-                gamePosY += 30;
-                chessTurn = 2;
-            }
-
-            switch (state) {
-                case 0:
-                    ch1.walkToTargetGridX(delta, 4);
-                    ch1.walkToTargetGridY(delta, 5);
-                    if (ch1.isMoved(ch1.getObjPlayer(), 4, 5)&&chessTurn==2) {
-                        state++;
-                        chessTurn = 1;
-                    }
-                    break;
-                case 1:
-                    ch2.walkToTargetGridX(delta, 7);
-                    ch2.walkToTargetGridY(delta, 6);
-                    if (ch2.isMoved(ch2.getObjPlayer(), 7, 6)&&chessTurn==2) {
-                        state++;
-                        chessTurn = 1;
-                    }
-                    break;
-                default:
-                    chessTurn = 1;
-                    break;
-
-            }
-            batch.end();
-        }else{
-            batch.begin();
-            player.updateHero(delta);
-            player.renderHero(delta);
-            ////add chess///
-            ch1.render();
-            ch2.render();
-            /////
-            process();
-            drawGate();
-            batch.end();
-        }
-
+        batch.begin();
+        player.updateHero(delta);
+        player.renderHero(delta);
+        ////add chess///
+        king.render();
+        rook.render();
+        queen2.render();
+        knight.render();
+        bishop.render();
+        queen1.render();
+        process_chess();
+        process();
+        drawGate();
+        batch.end();
     }
 
-    private void chessGame() {
+    private void process_chess() {
+        //die case
+        if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
+        {
+            knight.setting("sprite\\chess\\3.png",30*10,30*11);
+            knight.create();
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN))
+        {
+            queen2.setting("sprite\\chess\\6.png",30*10,30*9);
+            queen2.create();
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)&&Gdx.input.isKeyJustPressed(Input.Keys.LEFT));
+        {
+            king.setting("sprite\\chess\\5.png",30*9,30*9);
+            king.render();
+        }
 
+        //case LEFT
+        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT))
+        {
+            queen2.setting("sprite\\chess\\6.png",30*9,30*9);
+            queen2.create();
+            last_walk1 = "LEFT";
+        }
+        //case LEFT LEFT
+        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)&&last_walk1.equals("LEFT"))
+        {
+            rook.setting("sprite\\chess\\2.png",30*7,30*10);
+            rook.create();
+            last_walk2 = "LEFT";
+        }
+        //case LEFT RIGHT
+        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)&&last_walk1.equals("LEFT"))
+        {
+            rook.setting("sprite\\chess\\2.png",30*10,30*14);
+            rook.create();
+            last_walk2 = "RIGHT";
+        }
 
+        //case LEFTRIGTH
+        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)&&Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
+        {
+            queen2.setting("sprite\\chess\\6.png",30*3,30*11);
+            queen2.create();
+            last_walk1 = "LEFTRIGHT";
+        }
+        //case LEFTRIGHT UP UPRIGHT
+        if((Gdx.input.isKeyJustPressed(Input.Keys.UP)||(Gdx.input.isKeyJustPressed(Input.Keys.UP))
+                &&Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))&&last_walk1.equals("LEFTRIGHT"))
+        {
+            queen2.setting("sprite\\chess\\6.png",30*10,30*11);
+            queen2.create();
+            last_walk2 = "UP UPRIGHT";
+        }
+        //case LEFTRIGHT UPLEFT
+        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)&&last_walk1.equals("LEFT"))
+        {
+            queen1.setting("sprite\\chess\\6.png",30*7,30*12);
+            queen1.create();
+            last_walk2 = "UPLEFT";
+        }
+       // if()
+        if(!last_walk2.equals("NONE")&&Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))
+        {
+            change = 2;
+        }
     }
 
     private void process() {
@@ -224,12 +216,8 @@ public class Map4 implements Screen {
         //check gate change map
         if(gate_left.overlaps(player.getObjPlayer()))
         {
-            change = true;
+            change = 1;
         }
-        if(board.overlaps(player.getObjPlayer())){
-            challenge = true;
-        }
-
     }
 
     @Override
@@ -257,7 +245,7 @@ public class Map4 implements Screen {
 
     }
 
-    public boolean changeMap()
+    public int changeMap()
     {
         return change;
     }

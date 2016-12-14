@@ -72,9 +72,14 @@ public class Loops extends Game {
 			m3 = new Map3(batch);
 		}
 		//map 4
-		if(m4.changeMap())
+		if(m4.changeMap()==1)
 		{
 			this.setScreen(m5);
+			m4 = new Map4(batch);
+		}
+		if(m4.changeMap()==2)
+		{
+			this.setScreen(die);
 			m4 = new Map4(batch);
 		}
 		//map 5
