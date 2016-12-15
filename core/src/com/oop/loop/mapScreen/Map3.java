@@ -45,8 +45,9 @@ public class Map3 implements Screen {
     private float Px=30*19,Py=30*9;
 
     boolean question = false;
+    boolean talk = false;
     int ans=1;
-    int qAns=0;
+    int qAns=1;
     private NPC pk1;
     private NPC pk2;
     private NPC pk3;
@@ -107,7 +108,7 @@ public class Map3 implements Screen {
         not_pass.add(pk.getObjPlayer());
 
         mesg = new ArrayList<Texture>();
-        for(int i=0;i<5;i++)
+        for(int i=0;i<8;i++)
         {
             mesg.add(new Texture("message\\map3\\pumpkin "+(i+1)+".jpg"));
         }
@@ -151,8 +152,11 @@ public class Map3 implements Screen {
                 batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*12,30,30);
                 batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*4,30,30);
                 batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*4,30,30);
-            }
-            batch.draw(new Texture("sprite\\NPC\\01.png"), 30*1, 30*9,60,64);
+            }if(order!=4){
+            batch.draw(new Texture("sprite\\NPC\\01.png"), 30*1, 30*9,60,64);}
+           if(order==4){
+               batch.draw(new Texture("sprite\\NPC\\01.png"), 30*1, 30*11,60,64);}
+
             batch.draw(player.getState(), player.getObjectPositionX(), player.getObjectPositionY(),30,30);
 
 
@@ -160,6 +164,7 @@ public class Map3 implements Screen {
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
                 show = false;
+
             }
             if(question){
                 if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
@@ -199,12 +204,18 @@ public class Map3 implements Screen {
                     //Gdx.app.log("",Math.abs(qAns%4)+" "+ans);
                     if(Math.abs(qAns%4)!=ans){
                         pk.changeLocate(30*1,30*11);         //q3
-                        show=false;
+                        order=4;
+                        talk = true;
+                        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+                            show = false;
+                        }
                     }
                     else{
-                        //q1
-                        //end
-                        show=false;
+
+
+                        change=2;
+
+
                     }
                     question = false;
                 }
@@ -240,7 +251,7 @@ public class Map3 implements Screen {
             change = 1;
         }
         if(player.getObjPlayer().overlaps(pk.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
-            order = 4;
+            order = 5;
             question = true;
             show = true;
         }

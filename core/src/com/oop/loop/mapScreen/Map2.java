@@ -106,13 +106,15 @@ public class Map2 implements Screen{
             pk1.changeLocate(30*1,30*11);
             batch.begin();
             batch.draw(mesg.get(2), 0, 0);
-            batch.draw(new Texture(Gdx.files.internal("new pumkin\\55.png")),30*1,30*8,60,60);
+
             batch.draw(new Texture(Gdx.files.internal("sprite\\boy\\b7.png")),player.getObjectPositionX(),player.getObjectPositionY(),32,32);
             batch.end();
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
-                order = 1;
-                counter++;
+                //order = 1;
+                talking=false;
+                stage=0;
+               // counter++;
             }
         }
 
@@ -143,6 +145,7 @@ public class Map2 implements Screen{
                 counter = 0;
                 isTalk = 2;
             }
+
 
         }
     }
@@ -182,6 +185,7 @@ public class Map2 implements Screen{
         if(pk1.getObjPlayer().overlaps(player.getObjPlayer())&& Gdx.input.isKeyJustPressed(Input.Keys.Z)){
                         talking = true;
         }
+
     }
 
     @Override

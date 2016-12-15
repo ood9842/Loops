@@ -19,10 +19,12 @@ public class Loops extends Game {
 	private Map_end end_map;
 	//scene
 	private Die_scene die;
+	private Die_scene2 die2;
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		die = new Die_scene(batch);
+		die2 = new Die_scene2(batch);
 		start = new Start_Screen(this);
 		end = new End_Screen(this);
 		m1 = new Map1(batch);
@@ -32,7 +34,7 @@ public class Loops extends Game {
 		m5 = new Map5(batch);
 		m6 = new Map6(batch);
 		end_map = new Map_end(batch);
-		this.setScreen(m4);
+		this.setScreen(m3);
 	}
 
 	@Override
@@ -85,8 +87,8 @@ public class Loops extends Game {
 		}
 		if(m4.changeMap()==2)
 		{
-			die.run();
-			this.setScreen(die);
+			die2.run();
+			this.setScreen(die2);
 			m4 = new Map4(batch);
 		}
 		//map 5
