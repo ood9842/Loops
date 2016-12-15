@@ -36,7 +36,7 @@ public class Map3 implements Screen {
     private ArrayList<Rectangle> not_pass = new ArrayList<Rectangle>();
     //gate
     private Rectangle gate_left;
-    private boolean change=false;
+    private int change = 0;
     private boolean show = false;
     private int order = 0;
     private ArrayList<Texture> mesg;
@@ -148,9 +148,9 @@ public class Map3 implements Screen {
             batch.begin();
             if(!question){
                 batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*12,30,30);
-            batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*12,30,30);
-            batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*4,30,30);
-            batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*4,30,30);
+                batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*12,30,30);
+                batch.draw(new Texture("new pumkin\\55.png"), 30*5, 30*4,30,30);
+                batch.draw(new Texture("new pumkin\\55.png"), 30*13, 30*4,30,30);
             }
             batch.draw(new Texture("sprite\\NPC\\01.png"), 30*1, 30*9,60,64);
             batch.draw(player.getState(), player.getObjectPositionX(), player.getObjectPositionY(),30,30);
@@ -166,7 +166,7 @@ public class Map3 implements Screen {
                     qAns--;
                 }
                 if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-                   qAns++;
+                    qAns++;
                 }
                 if(Math.abs(qAns%4)==0){
                     batch.draw(new Texture("sprite\\NPC\\02.png"), 30*13, 30*12,40,40);
@@ -197,11 +197,13 @@ public class Map3 implements Screen {
                 }
                 if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
                     //Gdx.app.log("",Math.abs(qAns%4)+" "+ans);
-                    if(Math.abs(qAns%4)==ans){
+                    if(Math.abs(qAns%4)!=ans){
                         pk.changeLocate(30*1,30*11);         //q3
                         show=false;
                     }
                     else{
+                        //q1
+                        //end
                         show=false;
                     }
                     question = false;
@@ -235,7 +237,7 @@ public class Map3 implements Screen {
         //check gate change map
         if(gate_left.overlaps(player.getObjPlayer()))
         {
-            change = true;
+            change = 1;
         }
         if(player.getObjPlayer().overlaps(pk.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
             order = 4;
@@ -285,7 +287,7 @@ public class Map3 implements Screen {
 
     }
 
-    public boolean changeMap()
+    public int changeMap()
     {
         return change;
     }
