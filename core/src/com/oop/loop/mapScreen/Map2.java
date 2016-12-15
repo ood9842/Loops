@@ -49,10 +49,10 @@ public class Map2 implements Screen{
     private ArrayList<Texture> mesg;
     private int order = 0;
     private int counter = 0;
-    private Texture cp;
     private NPC pk1;
     private boolean talking = false;
     private int isTalk = 0;
+    private int stage = 0;
 
     public Map2(SpriteBatch batch)
     {
@@ -80,10 +80,9 @@ public class Map2 implements Screen{
         not_pass.add(pk1.getObjPlayer());
         //create chat box
         mesg = new ArrayList<Texture>();
-        for(int i=0 ; i<2 ; i++) {
+        for(int i=0 ; i<3 ; i++) {
             mesg.add(new Texture(Gdx.files.internal("message\\map2\\0"+(i+1)+".jpg")));
         }
-        cp = new Texture(Gdx.files.internal("message\\map2\\pumpkin 1.jpg"));
     }
 
     @Override
@@ -101,6 +100,21 @@ public class Map2 implements Screen{
         batch.setProjectionMatrix(gameCam.combined);
         paintMap.render();
         //draw player
+
+        if(stage ==1)
+        {
+            pk1.changeLocate(30*1,30*11);
+            batch.begin();
+            batch.draw(mesg.get(2), 0, 0);
+            batch.draw(new Texture(Gdx.files.internal("new pumkin\\55.png")),30*1,30*8,60,60);
+            batch.draw(new Texture(Gdx.files.internal("sprite\\boy\\b7.png")),player.getObjectPositionX(),player.getObjectPositionY(),32,32);
+            batch.end();
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+                order = 1;
+                counter++;
+            }
+        }
 
         if(!talking) {
             batch.begin();
@@ -160,7 +174,7 @@ public class Map2 implements Screen{
         }
         //
         if( Gdx.input.isKeyJustPressed(Input.Keys.X)&&pk1.getObjPlayer().overlaps(player.getObjPlayer())&&isTalk==2){
-            pk1.changeLocate(30*1,30*11);
+            stage = 1;
             isFound = true;
         }
 

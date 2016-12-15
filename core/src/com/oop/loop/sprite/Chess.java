@@ -167,7 +167,7 @@ public class Chess implements ApplicationListener {
     }
     public boolean isMoved(Rectangle o,int targetX,int targetY){
 
-        if ((int)o.y == targetY*30 && (int)o.x == targetX*30) {
+        if ((int)o.y >= targetY*30-30 && (int)o.x == targetX*30) {
            return true;
         }
        else {
