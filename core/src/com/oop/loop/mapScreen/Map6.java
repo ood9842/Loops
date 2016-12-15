@@ -1,9 +1,11 @@
 package com.oop.loop.mapScreen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oop.loop.sprite.Hero;
+import com.oop.loop.sprite.NPC;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -42,7 +45,12 @@ public class Map6 implements Screen {
     private int door = 0;
     //player
     private Hero player;
-    private float Px=300,Py=300;
+    private NPC hm;
+    private float Px=30*10,Py=30*17;
+
+    private boolean show = false;
+    private ArrayList<Texture> mesg;
+    private int order = 0;
 
     public Map6(SpriteBatch batch)
     {
@@ -68,6 +76,17 @@ public class Map6 implements Screen {
         player = new Hero(this.batch);
         player.create();
         player.setObjPlayerPosition((int)Px,(int)Py);
+
+        hm = new NPC(this.batch);
+        hm.setting_Position("new pumkin\\55.png",30*7,(30*11));
+        hm.create();
+        hm.setting_size(60,60);
+        not_pass.add(hm.getObjPlayer());
+        //create chat box
+        mesg = new ArrayList<Texture>();
+        for(int i=9 ; i<11 ; i++) {
+            mesg.add(new Texture(Gdx.files.internal("message\\map6\\pumpkin "+(i+1)+".jpg")));
+        }
     }
 
     @Override
@@ -78,20 +97,36 @@ public class Map6 implements Screen {
     @Override
     public void render(float delta) {
         //set point to render map
-        paintMap.setView(gameCam);
-        //clear screen
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //render at camera and paint map
-        batch.setProjectionMatrix(gameCam.combined);
-        paintMap.render();
-        //draw player
-        batch.begin();
-        player.updateHero(delta);
-        player.renderHero(delta);
-        process();
-        drawGate();
-        batch.end();
+
+            paintMap.setView(gameCam);
+            //clear screen
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            //render at camera and paint map
+            batch.setProjectionMatrix(gameCam.combined);
+            paintMap.render();
+            //draw player
+            if(!show) {
+                batch.begin();
+                hm.render();
+            player.updateHero(delta);
+            player.renderHero(delta);
+            process();
+            batch.end();
+        }else{
+                batch.begin();
+                batch.draw(mesg.get(order), 0, 0);
+                batch.draw(new Texture("new pumkin\\55.png"), 30*7,(30*11),60,60);
+                batch.draw(player.getState(), player.getObjectPositionX(), player.getObjectPositionY(),30,30);
+                if(Gdx.input.isKeyJustPressed(Input.Keys.X))
+                {
+                    order++;
+                }
+                if(order>1){
+                    show=false;
+                }
+                batch.end();
+            }
     }
 
     private void process() {
@@ -137,7 +172,10 @@ public class Map6 implements Screen {
         }
         if(get_gate==true_gate)
         {
-            door = 2;
+            door = 1;
+        }
+        if(hm.getObjPlayer().overlaps(player.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z)){
+            show=true;
         }
     }
 

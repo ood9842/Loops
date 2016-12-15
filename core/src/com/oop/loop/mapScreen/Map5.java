@@ -134,7 +134,6 @@ public class Map5 implements Screen {
         player.updateHero(delta);
         player.renderHero(delta);
         process();
-        drawGate();
         batch.end();     }
         else{
 

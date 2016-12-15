@@ -124,7 +124,6 @@ public class Map2 implements Screen{
             player.updateHero(delta);
             player.renderHero(delta);
             process();
-            drawGate();
             batch.end();
         }
         if(talking)//script

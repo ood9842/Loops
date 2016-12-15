@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.oop.loop.sprite.Chess;
 import com.oop.loop.sprite.Hero;
+import com.oop.loop.sprite.NPC;
 
 
 import java.util.ArrayList;
@@ -40,7 +41,9 @@ public class Map4 implements Screen {
     private int change=0;
     //player
     private Hero player;
-    private float Px=30*11,Py=30*10;
+    private NPC hm;
+
+    private float Px=30*14,Py=30*10;
     private String last_walk = "NONE";
     private int counter = 0;
 
@@ -50,6 +53,11 @@ public class Map4 implements Screen {
     int gamePosY = 30 * 10;
     Rectangle board;
     Texture boy;
+
+
+    private boolean show = false;
+    private ArrayList<Texture> mesg;
+    private int order = 0;
 
     Chess bishop;
     Chess queen1;
@@ -82,6 +90,12 @@ public class Map4 implements Screen {
         board.setPosition(30*3,30*7);
         board.setSize(30*8,30*8);
 
+        hm = new NPC(this.batch);
+        hm.setting_Position("new pumkin\\55.png",30*12,(30*11));
+        hm.create();
+        hm.setting_size(60,60);
+        not_pass.add(hm.getObjPlayer());
+
         boy = new Texture("sprite\\boy\\b15.png");
 
         ////add chess///
@@ -111,6 +125,11 @@ public class Map4 implements Screen {
         myKing = new Chess(this.batch);
         myKing.setting("sprite\\chess\\11.png",30*16,30*9);
         myKing.create();
+
+        mesg = new ArrayList<Texture>();
+        for(int i=0 ; i<3 ; i++) {
+            mesg.add(new Texture(Gdx.files.internal("message\\map4\\0"+(i+1)+".jpg")));
+        }
     }
 
     @Override
@@ -135,95 +154,97 @@ public class Map4 implements Screen {
         bishop.render();
         knight.render();
         king.render();
+        hm.render();
         //draw player
-
-        if(challenge) {
+        if(show){
             batch.begin();
-            myKing.update(gamePosX,gamePosY);
-            if(Gdx.input.isKeyJustPressed(Input.Keys.W)&&chessTurn==1){
-                gamePosY += 30;
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.X)&&chessTurn==1){
-                gamePosY -= 30;
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.A)&&chessTurn==1){
-                gamePosX -= 30;
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.D)&&chessTurn==1){
-                gamePosX += 30;
+            batch.draw(mesg.get(order), 0, 0);
 
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.C)&&chessTurn==1){
-                gamePosX += 30;
-                gamePosY -= 30;
-
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.E)&&chessTurn==1){
-                gamePosX += 30;
-                gamePosY += 30;
-
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.Z)&&chessTurn==1){
-                gamePosX -= 30;
-                gamePosY -= 30;
-
-                chessTurn = 2;
-            }
-            else if(Gdx.input.isKeyJustPressed(Input.Keys.Q)&&chessTurn==1){
-                gamePosX -= 30;
-                gamePosY += 30;
-
-                chessTurn = 2;
-            }
-            //logical chess
-            //case 1 in board
-            if(chessTurn==0&&counter==0)
+            batch.draw(player.getState(), player.getObjectPositionX(), player.getObjectPositionY(),30,30);
+            if(Gdx.input.isKeyJustPressed(Input.Keys.X))
             {
-                queen1.walkToTargetGridX(delta,7);
-                queen1.walkToTargetGridY(delta,11);
-                Gdx.app.log("",""+ queen1.getObjPlayer().x+ "  "+queen1.getObjPlayer().y);
-                if(queen1.isMoved(queen1.getObjPlayer(),7,11)){
-
-                chessTurn = 1;
-                }
-
+                order++;
             }
-            else if(chessTurn == 2)
-            {
-                queen1.walkToTargetGridX(delta,gamePosX/30);
-                queen1.walkToTargetGridY(delta,gamePosY/30);
-                queen2.walkToTargetGridX(delta,gamePosX/30);
-                queen2.walkToTargetGridY(delta,gamePosY/30);
-                rook.walkToTargetGridX(delta,gamePosX/30);
-                rook.walkToTargetGridY(delta,gamePosY/30);
-                bishop.walkToTargetGridX(delta,gamePosX/30);
-                bishop.walkToTargetGridY(delta,gamePosY/30);
-                knight.walkToTargetGridX(delta,gamePosX/30);
-                knight.walkToTargetGridY(delta,gamePosY/30);
-                king.walkToTargetGridX(delta,gamePosX/30);
-                king.walkToTargetGridY(delta,gamePosY/30);
-                //play sound1
-                if(queen1.isMoved(queen1.getObjPlayer(),gamePosX/30,gamePosY/30) && queen2.isMoved(queen2.getObjPlayer(),gamePosX/30,gamePosY/30)&& bishop.isMoved(bishop.getObjPlayer(),gamePosX/30,gamePosY/30)){
-
-                   change=2;
-                }
-
+            if(order>2){
+                show=false;
             }
             batch.end();
+        }else {
+            if (challenge) {
+                batch.begin();
+                myKing.update(gamePosX, gamePosY);
+                if (Gdx.input.isKeyJustPressed(Input.Keys.W) && chessTurn == 1) {
+                    gamePosY += 30;
+                    chessTurn = 2;
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.X) && chessTurn == 1) {
+                    gamePosY -= 30;
+                    chessTurn = 2;
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.A) && chessTurn == 1) {
+                    gamePosX -= 30;
+                    chessTurn = 2;
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.D) && chessTurn == 1) {
+                    gamePosX += 30;
+
+                    chessTurn = 2;
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.C) && chessTurn == 1) {
+                    gamePosX += 30;
+                    gamePosY -= 30;
+
+                    chessTurn = 2;
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.E) && chessTurn == 1) {
+                    gamePosX += 30;
+                    gamePosY += 30;
+
+                    chessTurn = 2;
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.Z) && chessTurn == 1) {
+                    gamePosX -= 30;
+                    gamePosY -= 30;
+
+                    chessTurn = 2;
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.Q) && chessTurn == 1) {
+                    gamePosX -= 30;
+                    gamePosY += 30;
+
+                    chessTurn = 2;
+                }
+                //logical chess
+                //case 1 in board
+                if (chessTurn == 0 && counter == 0) {
+                    queen1.walkToTargetGridX(delta, 7);
+                    queen1.walkToTargetGridY(delta, 11);
+                    Gdx.app.log("", "" + queen1.getObjPlayer().x + "  " + queen1.getObjPlayer().y);
+                    if (queen1.isMoved(queen1.getObjPlayer(), 7, 11)) {
+
+                        chessTurn = 1;
+                    }
+
+                } else if (chessTurn == 2) {
+                    queen1.walkToTargetGridX(delta, gamePosX / 30);
+                    queen1.walkToTargetGridY(delta, gamePosY / 30);
+                    queen2.walkToTargetGridX(delta, gamePosX / 30);
+                    queen2.walkToTargetGridY(delta, gamePosY / 30);
+                    rook.walkToTargetGridX(delta, gamePosX / 30);
+                    rook.walkToTargetGridY(delta, gamePosY / 30);
+                    bishop.walkToTargetGridX(delta, gamePosX / 30);
+                    bishop.walkToTargetGridY(delta, gamePosY / 30);
+                    knight.walkToTargetGridX(delta, gamePosX / 30);
+                    knight.walkToTargetGridY(delta, gamePosY / 30);
+                    king.walkToTargetGridX(delta, gamePosX / 30);
+                    king.walkToTargetGridY(delta, gamePosY / 30);
+                    //play sound1
+                    if (queen1.isMoved(queen1.getObjPlayer(), gamePosX / 30, gamePosY / 30) && queen2.isMoved(queen2.getObjPlayer(), gamePosX / 30, gamePosY / 30) && bishop.isMoved(bishop.getObjPlayer(), gamePosX / 30, gamePosY / 30)) {
+
+                        change = 2;
+                    }
+
+                }
+                batch.end();
+            } else {
+                player.updateHero(delta);
+                player.renderHero(delta);
+            }
+            process();
         }
-        else
-        {
-            player.updateHero(delta);
-            player.renderHero(delta);
-        }
-        process();
-        drawGate();
     }
 
     private void process() {
@@ -252,6 +273,9 @@ public class Map4 implements Screen {
         }
         if(board.overlaps(player.getObjPlayer())){
             challenge = true;
+        }
+        if(hm.getObjPlayer().overlaps(player.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z)){
+            show=true;
         }
 
     }

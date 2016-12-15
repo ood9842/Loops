@@ -119,7 +119,6 @@ public class Map1 implements Screen {
 
             batch.end();
             process();
-            drawGate();
         }
         if(!show)//script
         {

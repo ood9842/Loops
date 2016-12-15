@@ -141,7 +141,6 @@ public class Map3 implements Screen {
             player.updateHero(delta);
             player.renderHero(delta);
             process();
-            drawGate();
             batch.end();
 
         }
