@@ -186,35 +186,7 @@ public class murderer implements ApplicationListener {
 
 
         stateTime += deltaTime;
-        if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) && CANUP) {
 
-            state = State.WalkingU;
-            laststate = State.WalkingU;
-            objPlayer.y += VELOCITY_UP * deltaTime;
-
-
-
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))&& CANDOWN) {
-            laststate = State.WalkingD;
-            state = State.WalkingD;
-            objPlayer.y -= VELOCITY_DOWN * deltaTime;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) && CANLEFT) {
-
-            laststate = State.WalkingL;
-            state = State.WalkingL;
-            objPlayer.x -= VELOCITY_LEFT * deltaTime;
-
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) && CANRIGHT) {
-
-            laststate = State.WalkingR;
-            state = State.WalkingR;
-            objPlayer.x += VELOCITY_RIGHT * deltaTime;
-
-
-        } else {if (laststate == State.WalkingR) {
-
-            state = State.StandingR;
-        }
             if ((Gdx.input.isKeyPressed(Input.Keys.SPACE))){
 
                 objPlayer.set(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,30,30);
@@ -243,7 +215,7 @@ public class murderer implements ApplicationListener {
 
 
 
-    }
+    
     public void walkWithKey(){
         if (objPlayer.x < 0)
             objPlayer.x = 0;

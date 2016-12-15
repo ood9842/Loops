@@ -108,7 +108,7 @@ public class Map3 implements Screen {
         not_pass.add(pk.getObjPlayer());
 
         mesg = new ArrayList<Texture>();
-        for(int i=0;i<8;i++)
+        for(int i=0;i<9;i++)
         {
             mesg.add(new Texture("message\\map3\\pumpkin "+(i+1)+".jpg"));
         }
@@ -166,6 +166,7 @@ public class Map3 implements Screen {
 
             }
             if(question){
+                batch.draw(mesg.get(8), 0, 0);   //q2  q1
                 if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                     qAns--;
                 }
@@ -206,6 +207,7 @@ public class Map3 implements Screen {
                         order=4;
                         talk = true;
                         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+                            question = false;
                             show = false;
                         }
                     }
@@ -257,18 +259,22 @@ public class Map3 implements Screen {
         if(player.getObjPlayer().overlaps(pk1.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
             order = 0;
             show = true;
+            question = false;
         }
         if(player.getObjPlayer().overlaps(pk2.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
             order = 1;
             show = true;
+            question = false;
         }
         if(player.getObjPlayer().overlaps(pk3.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
             order = 2;
             show = true;
+            question = false;
         }
         if(player.getObjPlayer().overlaps(pk4.getObjPlayer())&&Gdx.input.isKeyJustPressed(Input.Keys.Z) ){
             order = 3;
             show = true;
+            question = false;
         }
     }
 

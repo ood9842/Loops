@@ -1,6 +1,7 @@
 package com.oop.loop.mapScreen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -46,6 +47,10 @@ public class Die_scene2 implements Screen{
         batch.begin();
         batch.draw(background,0,0);
         batch.end();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))
+        {
+            change = true;
+        }
     }
 
     @Override

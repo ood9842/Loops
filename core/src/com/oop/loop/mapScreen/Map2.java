@@ -44,7 +44,7 @@ public class Map2 implements Screen{
     private boolean isFound = false;
     //player
     private Hero player;
-    private float Px=300,Py=300;
+    private float Px=30*18,Py=30*9;
     //chat box and NPC
     private ArrayList<Texture> mesg;
     private int order = 0;

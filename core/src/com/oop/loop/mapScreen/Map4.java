@@ -43,7 +43,7 @@ public class Map4 implements Screen {
     private Hero player;
     private NPC hm;
 
-    private float Px=30*14,Py=30*10;
+    private float Px=30*18,Py=30*10;
     private String last_walk = "NONE";
     private int counter = 0;
 
@@ -173,16 +173,16 @@ public class Map4 implements Screen {
             if (challenge) {
                 batch.begin();
                 myKing.update(gamePosX, gamePosY);
-                if (Gdx.input.isKeyJustPressed(Input.Keys.W) && chessTurn == 1) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.W)||Gdx.input.isKeyJustPressed(Input.Keys.UP) && chessTurn == 1) {
                     gamePosY += 30;
                     chessTurn = 2;
-                } else if (Gdx.input.isKeyJustPressed(Input.Keys.X) && chessTurn == 1) {
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.X) ||Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && chessTurn == 1) {
                     gamePosY -= 30;
                     chessTurn = 2;
-                } else if (Gdx.input.isKeyJustPressed(Input.Keys.A) && chessTurn == 1) {
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.A) ||Gdx.input.isKeyJustPressed(Input.Keys.LEFT)&& chessTurn == 1) {
                     gamePosX -= 30;
                     chessTurn = 2;
-                } else if (Gdx.input.isKeyJustPressed(Input.Keys.D) && chessTurn == 1) {
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.D)||Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && chessTurn == 1) {
                     gamePosX += 30;
 
                     chessTurn = 2;
