@@ -37,7 +37,7 @@ public class Map4 implements Screen {
     private ArrayList<Rectangle> not_pass = new ArrayList<Rectangle>();
     //gate
     private Rectangle gate_left;
-    private boolean change=false;
+    private int change=0;
     //player
     private Hero player;
     private float Px=30*11,Py=30*10;
@@ -142,89 +142,78 @@ public class Map4 implements Screen {
             myKing.update(gamePosX,gamePosY);
             if(Gdx.input.isKeyJustPressed(Input.Keys.W)&&chessTurn==1){
                 gamePosY += 30;
-                if((myKing.getObjectPositionY()+30)>30*14)
-                {
-                    gamePosY -= 30;
-                }
                 chessTurn = 2;
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.X)&&chessTurn==1){
                 gamePosY -= 30;
-                if((myKing.getObjectPositionX()+30)<30*7)
-                {
-                    gamePosY += 30;
-                }
                 chessTurn = 2;
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.A)&&chessTurn==1){
                 gamePosX -= 30;
-                if((myKing.getObjectPositionX()+30)<30*3)
-                {
-                    gamePosX += 30;
-                }
                 chessTurn = 2;
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.D)&&chessTurn==1){
                 gamePosX += 30;
-                if((myKing.getObjectPositionX()+30)>30*10)
-                {
-                    gamePosX -= 30;
-                }
+
                 chessTurn = 2;
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.C)&&chessTurn==1){
                 gamePosX += 30;
                 gamePosY -= 30;
-                if(myKing.getObjectPositionX()+30>30*10||myKing.getObjectPositionY()-30<30*7)
-                {
-                    gamePosX -= 30;
-                    gamePosY += 30;
-                }
+
                 chessTurn = 2;
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.E)&&chessTurn==1){
                 gamePosX += 30;
                 gamePosY += 30;
-                if(myKing.getObjectPositionX()+30>30*10||myKing.getObjectPositionY()+30>30*14)
-                {
-                    gamePosX -= 30;
-                    gamePosY -= 30;
-                }
+
                 chessTurn = 2;
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.Z)&&chessTurn==1){
                 gamePosX -= 30;
                 gamePosY -= 30;
-                if(myKing.getObjectPositionX()-30<30*3||myKing.getObjectPositionY()-30<30*7)
-                {
-                    gamePosX += 30;
-                    gamePosY += 30;
-                }
+
                 chessTurn = 2;
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.Q)&&chessTurn==1){
                 gamePosX -= 30;
                 gamePosY += 30;
-                if(myKing.getObjectPositionX()+30<30*3||myKing.getObjectPositionY()+30>30*14)
-                {
-                    gamePosX += 30;
-                    gamePosY -= 30;
-                }
+
                 chessTurn = 2;
             }
             //logical chess
             //case 1 in board
             if(chessTurn==0&&counter==0)
             {
-                queen2.setting("sprite\\chess\\2.png",30*7,30*7 );
-                queen2.create();
-                queen2.render();
+                queen1.walkToTargetGridX(delta,7);
+                queen1.walkToTargetGridY(delta,11);
+                Gdx.app.log("",""+ queen1.getObjPlayer().x+ "  "+queen1.getObjPlayer().y);
+                if(queen1.isMoved(queen1.getObjPlayer(),7,11)){
+
                 chessTurn = 1;
-                counter++;
+                }
+
             }
-            else
+            else if(chessTurn == 2)
             {
-                chessTurn = 1;
+                queen1.walkToTargetGridX(delta,gamePosX/30);
+                queen1.walkToTargetGridY(delta,gamePosY/30);
+                queen2.walkToTargetGridX(delta,gamePosX/30);
+                queen2.walkToTargetGridY(delta,gamePosY/30);
+                rook.walkToTargetGridX(delta,gamePosX/30);
+                rook.walkToTargetGridY(delta,gamePosY/30);
+                bishop.walkToTargetGridX(delta,gamePosX/30);
+                bishop.walkToTargetGridY(delta,gamePosY/30);
+                knight.walkToTargetGridX(delta,gamePosX/30);
+                knight.walkToTargetGridY(delta,gamePosY/30);
+                king.walkToTargetGridX(delta,gamePosX/30);
+                king.walkToTargetGridY(delta,gamePosY/30);
+                //play sound1
+                if(queen1.isMoved(queen1.getObjPlayer(),gamePosX/30,gamePosY/30) && queen2.isMoved(queen2.getObjPlayer(),gamePosX/30,gamePosY/30)&& bishop.isMoved(bishop.getObjPlayer(),gamePosX/30,gamePosY/30)){
+
+                   change=2;
+                }
+
             }
             batch.end();
         }
@@ -259,7 +248,7 @@ public class Map4 implements Screen {
         //check gate change map
         if(gate_left.overlaps(player.getObjPlayer()))
         {
-            change = true;
+            change = 1;
         }
         if(board.overlaps(player.getObjPlayer())){
             challenge = true;
@@ -292,7 +281,7 @@ public class Map4 implements Screen {
 
     }
 
-    public boolean changeMap()
+    public int changeMap()
     {
         return change;
     }
