@@ -1,10 +1,12 @@
 package com.oop.loop.mapScreen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ObjectFloatMap;
 import com.badlogic.gdx.utils.TimeUtils;
 
 /**
@@ -15,6 +17,7 @@ public class Die_scene implements Screen{
     private SpriteBatch batch;
     private Texture background;
     private long time_start;
+    private  boolean change = false;
 
     public Die_scene(SpriteBatch batch)
     {
@@ -44,8 +47,16 @@ public class Die_scene implements Screen{
         batch.begin();
         batch.draw(background,0,0);
         batch.end();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))
+        {
+            change = true;
+        }
     }
 
+    public boolean changeMap()
+    {
+        return change;
+    }
     @Override
     public void resize(int width, int height) {
 

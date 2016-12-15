@@ -133,11 +133,11 @@ public class Map6 implements Screen {
         //check true gate
         if(get_gate!=true_gate&&get_gate!=0)
         {
-            door = 1;
+            door = 2;
         }
         if(get_gate==true_gate)
         {
-            door = 1;
+            door = 2;
         }
     }
 

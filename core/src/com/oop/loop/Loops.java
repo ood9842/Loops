@@ -32,7 +32,7 @@ public class Loops extends Game {
 		m5 = new Map5(batch);
 		m6 = new Map6(batch);
 		end_map = new Map_end(batch);
-		this.setScreen(m3);
+		this.setScreen(m6);
 	}
 
 	@Override
@@ -96,7 +96,8 @@ public class Loops extends Game {
 		}
 		if(m5.changeMap()==2)
 		{
-			this.setScreen(m1);
+			die.run();
+			this.setScreen(die);
 			m5 = new Map5(batch);
 		}
 		//map 6
@@ -107,7 +108,8 @@ public class Loops extends Game {
 		}
 		if(m6.changeMap()==2)
 		{
-			this.setScreen(m1);
+			die.run();
+			this.setScreen(die);
 			m6 = new Map6(batch);
 		}
 		//end map
@@ -122,6 +124,12 @@ public class Loops extends Game {
 		{
 			this.setScreen(start);
 			end = new End_Screen(this);
+		}
+		//die scene
+		if(die.changeMap())
+		{
+			this.setScreen(m1);
+			die = new Die_scene(batch);
 		}
 	}
 
