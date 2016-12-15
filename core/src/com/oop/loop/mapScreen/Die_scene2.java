@@ -16,6 +16,8 @@ public class Die_scene2 implements Screen{
     private Texture background;
     private long time_start;
 
+    private  boolean change = false;
+
     public Die_scene2(SpriteBatch batch)
     {
         this.batch = batch;
@@ -27,6 +29,11 @@ public class Die_scene2 implements Screen{
     {
         time_start = TimeUtils.nanoTime();
         sound.play();
+    }
+
+    public boolean changeMap()
+    {
+        return change;
     }
 
     @Override

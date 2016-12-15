@@ -2,6 +2,7 @@ package com.oop.loop;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.oop.loop.mapScreen.*;
@@ -20,6 +21,10 @@ public class Loops extends Game {
 	//scene
 	private Die_scene die;
 	private Die_scene2 die2;
+
+	private Sound sound;
+	private boolean toggle=true;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -34,7 +39,10 @@ public class Loops extends Game {
 		m5 = new Map5(batch);
 		m6 = new Map6(batch);
 		end_map = new Map_end(batch);
-		this.setScreen(m6);
+
+		sound = Gdx.audio.newSound(Gdx.files.internal("sound\\piano.wav"));
+
+		this.setScreen(start);
 	}
 
 	@Override
@@ -47,7 +55,10 @@ public class Loops extends Game {
 	{
 		//start map
 		if(start.changeMap()==1)
-		{
+		{	if(toggle){
+			sound.play();
+			toggle=false;
+			}
 			this.setScreen(m1);
 			start = new Start_Screen(this);
 		}
@@ -75,6 +86,7 @@ public class Loops extends Game {
 		}
 		if(m3.changeMap()==2)
 		{
+			sound.stop();
 			die.run();
 			this.setScreen(die);
 			m3 = new Map3(batch);
@@ -86,7 +98,7 @@ public class Loops extends Game {
 			m4 = new Map4(batch);
 		}
 		if(m4.changeMap()==2)
-		{
+		{	sound.stop();
 			die2.run();
 			this.setScreen(die2);
 			m4 = new Map4(batch);
@@ -98,7 +110,7 @@ public class Loops extends Game {
 			m5 = new Map5(batch);
 		}
 		if(m5.changeMap()==2)
-		{
+		{	sound.stop();
 			die.run();
 			this.setScreen(die);
 			m5 = new Map5(batch);
@@ -110,29 +122,45 @@ public class Loops extends Game {
 			m6 = new Map6(batch);
 		}
 		if(m6.changeMap()==2)
-		{
+		{	sound.stop();
 			die.run();
 			this.setScreen(die);
 			m6 = new Map6(batch);
 		}
 		//end map
 		if(end_map.changeMap())
-		{
+		{	sound.stop();
 			this.setScreen(end);
 			end.run();
 			end_map = new Map_end(batch);
 		}
 		//end scene
 		if(end.changeMap())
-		{
+		{	sound.stop();
+			toggle=true;
 			this.setScreen(start);
 			end = new End_Screen(this);
 		}
 		//die scene
 		if(die.changeMap())
-		{
+		{	sound.stop();
 			this.setScreen(m1);
+			toggle=true;
+			if(toggle){
+				sound.play();
+				toggle=false;
+			}
 			die = new Die_scene(batch);
+		}
+		if(die2.changeMap())
+		{	sound.stop();
+			this.setScreen(m1);
+			toggle=true;
+			if(toggle){
+				sound.play();
+				toggle=false;
+			}
+			die2 = new Die_scene2(batch);
 		}
 	}
 
@@ -144,5 +172,7 @@ public class Loops extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		sound.dispose();
+
 	}
 }

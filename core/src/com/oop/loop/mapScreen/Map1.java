@@ -3,6 +3,7 @@ package com.oop.loop.mapScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -52,6 +53,8 @@ public class Map1 implements Screen {
     Texture girl;
     boolean script = false;
 
+
+
     public Map1(SpriteBatch batch)
     {
         //receive graphic from Loops class
@@ -76,12 +79,14 @@ public class Map1 implements Screen {
         boy = new Texture("sprite\\boy\\b15.png");
         girl = new Texture("sprite\\girl\\g1.png");
 
+
     }
 
     @Override
     public void show() {
 
     }
+
 
     @Override
     public void render(float delta) {
